@@ -4,7 +4,11 @@ export default {
     "./src/**/*.{js,jsx,ts,tsx}", // Sesuaikan dengan struktur proyek Anda
   ],
   theme: {
-    extend: {},
+    extend: {
+      fontFamily: {
+        sans: ["SF Pro", "sans-serif"],
+      },
+    },
   },
   plugins: [require("daisyui")],
   daisyui: {
