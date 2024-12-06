@@ -49,7 +49,7 @@ importers:
         specifier: ^9.9.0
         version: 9.9.0
       '@types/react':
-        specifier: ^18.3.3
+        specifier: ^18.3.4
         version: 18.3.4
       '@types/react-dom':
         specifier: ^18.3.0
@@ -64,10 +64,10 @@ importers:
         specifier: ^7.35.0
         version: 7.35.0(eslint@9.9.0(jiti@1.21.6))
       eslint-plugin-react-hooks:
-        specifier: ^5.1.0-rc.0
+        specifier: ^5.1.0-rc-fb9a90fa48-20240614
         version: 5.1.0-rc-fb9a90fa48-20240614(eslint@9.9.0(jiti@1.21.6))
       eslint-plugin-react-refresh:
-        specifier: ^0.4.9
+        specifier: ^0.4.10
         version: 0.4.10(eslint@9.9.0(jiti@1.21.6))
       globals:
         specifier: ^15.9.0
