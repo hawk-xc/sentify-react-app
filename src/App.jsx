@@ -3,6 +3,7 @@ import AOS from "aos";
 import "aos/dist/aos.css";
 import Login from "./pages/loginPages";
 import Dashboard from "./pages/dashboardPages";
+import NavbarSectionPart from "./particles/NavbarSectionPart";
 import PrivateRoute from "./components/PrivateRoute";
 import { AuthProvider } from "./context/authContext";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
@@ -12,6 +13,7 @@ export default function App() {
     <AuthProvider>
       <BrowserRouter>
         <Routes>
+          <Route path="/" element={<Login />} />
           <Route path="/login" element={<Login />} />
           <Route
             path="/dashboard"
