@@ -4,6 +4,8 @@ import tiktokImg from "../assets/images/tiktok.png";
 import instagramImg from "../assets/images/instagram.jpeg";
 import youtubeImg from "../assets/images/youtube.png";
 import googlemapsImg from "../assets/images/googlemaps.png";
+import { createSentimentModel as CreateSentimentModel } from "../particles/models";
+import { CreateTagModel as CreateTagModel } from "../particles/models";
 
 const SentimentPages = () => {
   const [tags, setTags] = useState([]); // Semua tag
@@ -66,9 +68,17 @@ const SentimentPages = () => {
 
   return (
     <div className="py-5">
+      <CreateSentimentModel />
+      <CreateTagModel />
       <div className="grid grid-cols-12 gap-5">
         <div className="flex flex-col col-span-3 p-5 bg-white rounded-lg shadow-lg">
-          <h2 className="mb-3 text-3xl font-extrabold">My Tags</h2>
+          <h2 className="mb-3 text-3xl font-extrabold">🏷️My Tags</h2>
+          <button
+            className="mb-3 shadow-md btn bg-sky-100 hover:bg-sky-200"
+            onClick={() => document.getElementById("my_modal_2").showModal()}
+          >
+            Add Tags ➕
+          </button>
           {tags.length > 0 ? (
             <div className="flex flex-row flex-wrap">
               <button
@@ -77,19 +87,19 @@ const SentimentPages = () => {
                   activeTag === null ? "bg-blue-500 text-white" : "bg-base-200"
                 }`}
               >
-                All
+                🏷️All
               </button>
               {tags.map((tag) => (
                 <button
                   key={tag.unique_id}
                   onClick={() => handleTagClick(tag.unique_id)}
-                  className={`flex flex-row gap-1 m-1 p-2 rounded-box ${
+                  className={`flex flex-row gap-1 m-1 px-3 py-2 rounded-box ${
                     activeTag === tag.unique_id
                       ? "bg-blue-500 text-white"
                       : "bg-base-200"
                   }`}
                 >
-                  {tag.tag_name}
+                  🏷️{tag.tag_name}
                 </button>
               ))}
             </div>
@@ -100,14 +110,22 @@ const SentimentPages = () => {
 
         {/* My Sentiment */}
         <div className="flex flex-col col-span-6 p-5 bg-white rounded-lg shadow-lg">
-          <h2 className="mb-3 text-3xl font-extrabold">My Sentiment</h2>
+          <div className="flex flex-row items-center justify-between">
+            <h2 className="mb-3 text-3xl font-extrabold">😃My Sentiment</h2>
+            <button
+              className="mb-3 shadow-md btn bg-sky-100 hover:bg-sky-200"
+              onClick={() => document.getElementById("my_modal_1").showModal()}
+            >
+              Add Sentiment➕
+            </button>
+          </div>
           {isLoading ? (
             <p>Loading sentiment data...</p>
           ) : sentiment.length > 0 ? (
             sentiment.map((item) => (
               <div key={item.sentiment_id} className="flex flex-col gap-5">
-                <div className="flex items-center my-1 menu bg-base-200 lg:menu-horizontal rounded-box">
-                  <li className="justify-between w-full">
+                <div className="flex items-center my-1 duration-150 menu bg-base-200 active:bg-base-300 active:scale-95 lg:menu-horizontal rounded-box">
+                  <li className="justify-between w-full active:bg-base-300">
                     <span
                       rel="noopener noreferrer"
                       className="flex justify-between"
@@ -141,7 +159,7 @@ const SentimentPages = () => {
 
         {/* Statistic */}
         <div className="col-span-3 p-5 bg-white rounded-lg shadow-lg">
-          <h2 className="mb-3 text-3xl font-extrabold">Statistic</h2>
+          <h2 className="mb-3 text-3xl font-extrabold">🔎Statistic</h2>
         </div>
       </div>
     </div>
