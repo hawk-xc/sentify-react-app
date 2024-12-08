@@ -4,7 +4,7 @@ import tiktokImg from "../assets/images/tiktok.png";
 import instagramImg from "../assets/images/instagram.jpeg";
 import youtubeImg from "../assets/images/youtube.png";
 import googlemapsImg from "../assets/images/googlemaps.png";
-import { createSentimentModel as CreateSentimentModel } from "../particles/models";
+import { CreateSentimentModel as CreateSentimentModel } from "../particles/models";
 import { CreateTagModel as CreateTagModel } from "../particles/models";
 
 const SentimentPages = () => {
@@ -68,7 +68,7 @@ const SentimentPages = () => {
 
   return (
     <div className="py-5">
-      <CreateSentimentModel />
+      <CreateSentimentModel tags={tags} />
       <CreateTagModel />
       <div className="grid grid-cols-12 gap-5">
         <div className="flex flex-col col-span-3 p-5 bg-white rounded-lg shadow-lg">

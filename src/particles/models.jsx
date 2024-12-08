@@ -1,4 +1,16 @@
-export const createSentimentModel = (props) => {
+import { useState } from "react";
+import tiktokImg from "../assets/images/tiktok.png";
+import instagramImg from "../assets/images/instagram.jpeg";
+import youtubeImg from "../assets/images/youtube.png";
+import googlemapsImg from "../assets/images/googlemaps.png";
+
+export const CreateSentimentModel = (props) => {
+  const [selectedSocialMedia, setSelectedSocialMedia] = useState("");
+
+  const handleSocialMediaChange = (event) => {
+    setSelectedSocialMedia(event.target.value);
+  };
+
   return (
     <dialog id="my_modal_1" className="modal">
       <div className="modal-box">
@@ -24,6 +36,69 @@ export const createSentimentModel = (props) => {
           </div>
         </div>
         <form className="flex flex-col gap-3 px-2 my-5">
+          <div className="flex gap-4">
+            {/* TikTok Option */}
+            <label
+              className={`flex flex-col items-center p-4 transition-all rounded-lg cursor-pointer ${
+                selectedSocialMedia === "tiktok"
+                  ? "bg-gray-300 border-blue-500"
+                  : "bg-gray-100 border-gray-300 hover:bg-gray-200"
+              }`}
+            >
+              <input
+                type="radio"
+                name="socialMedia"
+                value="tiktok"
+                className="hidden peer"
+                onChange={handleSocialMediaChange}
+              />
+              <img src={tiktokImg} alt="TikTok" className="w-12 h-12 mb-2" />
+              <span className="text-sm font-medium">TikTok</span>
+            </label>
+
+            {/* Instagram Option */}
+            <label
+              className={`flex flex-col items-center p-4 transition-all rounded-lg cursor-pointer ${
+                selectedSocialMedia === "instagram"
+                  ? "bg-gray-300 border-pink-500"
+                  : "bg-gray-100 border-gray-300 hover:bg-gray-200"
+              }`}
+            >
+              <input
+                type="radio"
+                name="socialMedia"
+                value="instagram"
+                className="hidden peer"
+                onChange={handleSocialMediaChange}
+              />
+              <img
+                src={instagramImg}
+                alt="Instagram"
+                className="w-12 h-12 mb-2"
+              />
+              <span className="text-sm font-medium">Instagram</span>
+            </label>
+
+            {/* YouTube Option */}
+            <label
+              className={`flex flex-col items-center p-4 transition-all rounded-lg cursor-pointer ${
+                selectedSocialMedia === "youtube"
+                  ? "bg-gray-300 border-red-500"
+                  : "bg-gray-100 border-gray-300 hover:bg-gray-200"
+              }`}
+            >
+              <input
+                type="radio"
+                name="socialMedia"
+                value="youtube"
+                className="hidden peer"
+                onChange={handleSocialMediaChange}
+              />
+              <img src={youtubeImg} alt="YouTube" className="w-12 h-12 mb-2" />
+              <span className="text-sm font-medium">YouTube</span>
+            </label>
+          </div>
+
           <div className="flex flex-col gap-1">
             Sentiment Title
             <label className="flex items-center gap-2 input input-bordered">
@@ -35,7 +110,7 @@ export const createSentimentModel = (props) => {
             Sentiment Link
             <label className="flex items-center gap-2 input input-bordered">
               🔗
-              <input type="text" className="grow" placeholder="Link" />
+              <input type="text" className="grow" placeholder="Link" required />
             </label>
           </div>
           <div className="flex flex-col gap-1">
@@ -49,6 +124,21 @@ export const createSentimentModel = (props) => {
                 defaultValue={5}
               />
             </label>
+          </div>
+          <div className="flex flex-col gap-2">
+            Tags
+            <div className="flex flex-row flex-wrap gap-2 p-3 rounded-lg bg-slate-50">
+              {props.tags.map((item) => {
+                return (
+                  <label className="flex items-center text-sm font-medium transition-colors rounded-full cursor-pointer">
+                    <input type="checkbox" className="hidden peer" />
+                    <span className="px-3 py-1 rounded-full peer-checked:bg-sky-200 peer-checked:text-black bg-slate-200 hover:bg-slate-300">
+                      🏷️{item.tag_name}
+                    </span>
+                  </label>
+                );
+              })}
+            </div>
           </div>
         </form>
         <div className="modal-action">
