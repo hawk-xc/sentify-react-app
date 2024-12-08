@@ -1,42 +1,38 @@
 // src/pages/Login.jsx
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axiosClient from "../api/axiosClient";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/authContext";
 
 export default function Login() {
-  const { login } = useAuth();
+  const { login, user } = useAuth(); // Ambil data user dari AuthContext
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
 
-  const handleClickShowPassword = (e) => {
-    e.preventDefault(); // Mencegah form submit saat tombol diklik
-    setShowPassword((prev) => !prev);
-  };
-
-  const closeModal = () => {
-    document.getElementById("my_modal_3").close(); // Menutup modal dengan close()
-  };
+  // Jika user sudah login, arahkan ke dashboard
+  useEffect(() => {
+    if (user) {
+      navigate("/dashboard");
+    }
+  }, [user, navigate]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       const response = await axiosClient.post("/login", {
-        email: email,
-        password: password,
+        email,
+        password,
       });
       const { token, user } = response.data;
-      login(token, user);
-      localStorage.setItem("token", token);
-      navigate("/dashboard");
+      login(token, user); // Simpan user dan token di context
+      navigate("/dashboard"); // Arahkan ke dashboard setelah login
     } catch (error) {
       console.error("Login failed", error.response?.data?.message);
       setErrorMessage(error.response?.data?.message || "Login failed");
-      // Open the modal on error
-      document.getElementById("my_modal_3").showModal(); // Menampilkan modal error
+      document.getElementById("my_modal_3").showModal(); // Tampilkan modal error
     }
   };
 
@@ -51,13 +47,13 @@ export default function Login() {
                 <button
                   type="button"
                   className="absolute btn btn-sm btn-circle btn-ghost right-2 top-2"
-                  onClick={closeModal}
+                  onClick={() => document.getElementById("my_modal_3").close()}
                 >
                   ✕
                 </button>
               </form>
-              <h3 className="text-2xl font-bold">😟Login Error!</h3>
-              <p className="py-4">🔒{errorMessage}</p>
+              <h3 className="text-2xl font-bold">😟 Login Error!</h3>
+              <p className="py-4">🔒 {errorMessage}</p>
             </div>
           </dialog>
 
@@ -88,17 +84,12 @@ export default function Login() {
                   required
                 />
                 <button
-                  onClick={handleClickShowPassword}
-                  className="z-50 border rounded-md btn-xs active:bg-slate-100"
                   type="button"
+                  onClick={() => setShowPassword((prev) => !prev)}
+                  className="z-50 border rounded-md btn-xs active:bg-slate-100"
                 >
                   {showPassword ? "Hide" : "Show"}
                 </button>
-              </label>
-              <label className="label">
-                <a href="#" className="label-text-alt link link-hover">
-                  Forgot password?
-                </a>
               </label>
             </div>
             <div className="mt-6 form-control">
@@ -107,13 +98,6 @@ export default function Login() {
               </button>
             </div>
           </form>
-          <div className="divider">OR</div>
-          <div className="text-center">
-            <p>Don't have an account?</p>
-            <a href="#" className="link link-primary">
-              Sign up now
-            </a>
-          </div>
         </div>
       </div>
     </div>

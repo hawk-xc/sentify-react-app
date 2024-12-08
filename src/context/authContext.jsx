@@ -1,17 +1,11 @@
-import React, { createContext, useState, useContext, useEffect } from "react";
+// src/context/authContext.jsx
+import { createContext, useContext, useState, useEffect } from "react";
 import Cookies from "js-cookie";
 
 const AuthContext = createContext();
 
-const AuthProvider = ({ children }) => {
+export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
-
-  useEffect(() => {
-    const token = Cookies.get("token");
-    if (token) {
-      setUser({ token });
-    }
-  }, []);
 
   const login = (token, userData) => {
     Cookies.set("token", token);
@@ -23,19 +17,20 @@ const AuthProvider = ({ children }) => {
     setUser(null);
   };
 
+  useEffect(() => {
+    const token = Cookies.get("token");
+    if (token) {
+      setUser({ name: "Dummy User", email: "dummy@example.com" });
+    }
+  }, []);
+
   return (
     <AuthContext.Provider value={{ user, login, logout }}>
       {children}
     </AuthContext.Provider>
   );
-};
+}
 
-const useAuth = () => {
-  const context = useContext(AuthContext);
-  if (!context) {
-    throw new Error("useAuth must be used within an AuthProvider");
-  }
-  return context;
-};
-
-export { AuthProvider, useAuth };
+export function useAuth() {
+  return useContext(AuthContext);
+}
