@@ -1,20 +1,15 @@
-import { useState, useEffect, useRef } from "react";
-import AOS from "aos";
-import "aos/dist/aos.css";
-import Login from "./pages/loginPages";
-import Dashboard from "./pages/dashboardPages";
-import NavbarSectionPart from "./particles/NavbarSectionPart";
-import PrivateRoute from "./components/PrivateRoute";
-import { AuthProvider } from "./context/authContext";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { AuthProvider } from "./context/authContext.js";
+import PrivateRoute from "./components/PrivateRoute.jsx";
+import LoginPage from "./pages/loginPages.jsx";
+import Dashboard from "./pages/dashboardPages.jsx";
 
-export default function App() {
+function App() {
   return (
     <AuthProvider>
-      <BrowserRouter>
+      <Router>
         <Routes>
-          <Route path="/" element={<Login />} />
-          <Route path="/login" element={<Login />} />
+          <Route path="/login" element={<LoginPage />} />
           <Route
             path="/dashboard"
             element={
@@ -24,7 +19,9 @@ export default function App() {
             }
           />
         </Routes>
-      </BrowserRouter>
+      </Router>
     </AuthProvider>
   );
 }
+
+export default App;

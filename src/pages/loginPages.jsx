@@ -3,19 +3,22 @@ import React, { useState, useEffect } from "react";
 import axiosClient from "../api/axiosClient";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/authContext";
+import Cookies from "js-cookie";
 
 export default function Login() {
-  const { login, user } = useAuth(); // Ambil data user dari AuthContext
+  const { login, user } = useAuth();
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
 
-  // Jika user sudah login, arahkan ke dashboard
+  // Redirect jika user sudah login atau token valid
   useEffect(() => {
-    if (user) {
-      navigate("/dashboard");
+    const token = Cookies.get("token");
+    if ((user || token) && window.location.pathname === "/login") {
+      console.log("User authenticated, redirecting to dashboard");
+      navigate("/dashboard", { replace: true }); // Hindari kembali ke login
     }
   }, [user, navigate]);
 
@@ -26,11 +29,13 @@ export default function Login() {
         email,
         password,
       });
+
       const { token, user } = response.data;
+      console.log("Login successful:", response.data);
       login(token, user); // Simpan user dan token di context
-      navigate("/dashboard"); // Arahkan ke dashboard setelah login
+      navigate("/dashboard"); // Redirect setelah login berhasil
     } catch (error) {
-      console.error("Login failed", error.response?.data?.message);
+      console.error("Login failed:", error.response?.data?.message);
       setErrorMessage(error.response?.data?.message || "Login failed");
       document.getElementById("my_modal_3").showModal(); // Tampilkan modal error
     }

@@ -1,17 +1,11 @@
-// src/components/PrivateRoute.jsx
-import React from "react";
-import { Navigate } from "react-router-dom";
-import { useAuth } from "../context/authContext";
-import Cookies from "js-cookie";
+import { Navigate, Outlet } from "react-router-dom";
+import { useContext } from "react";
+import AuthContext from "./context/authContext";
 
-export default function PrivateRoute({ children }) {
-  const { user } = useAuth();
-  const token = Cookies.get("token"); // Periksa token dari cookies
+const PrivateRoute = () => {
+  const { user } = useContext(AuthContext);
 
-  if (!user && !token) {
-    // Jika user dan token tidak ada, arahkan ke halaman login
-    return <Navigate to="/login" />;
-  }
+  return user ? <Outlet /> : <Navigate to="/login" />;
+};
 
-  return children; // Jika user atau token ada, tampilkan konten
-}
+export default PrivateRoute;

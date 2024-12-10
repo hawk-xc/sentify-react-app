@@ -36,12 +36,12 @@ export const CreateSentimentModel = (props) => {
           </div>
         </div>
         <form className="flex flex-col gap-3 px-2 my-5">
-          <div className="flex gap-4">
+          <div className="flex flex-row gap-4">
             {/* TikTok Option */}
             <label
-              className={`flex flex-col items-center p-4 transition-all rounded-lg cursor-pointer ${
+              className={`flex flex-col items-center w-24 align-middle justify-center transition-all rounded-lg cursor-pointer h-24 ${
                 selectedSocialMedia === "tiktok"
-                  ? "bg-gray-300 border-blue-500"
+                  ? "bg-sky-200 border-blue-500"
                   : "bg-gray-100 border-gray-300 hover:bg-gray-200"
               }`}
             >
@@ -58,9 +58,9 @@ export const CreateSentimentModel = (props) => {
 
             {/* Instagram Option */}
             <label
-              className={`flex flex-col items-center p-4 transition-all rounded-lg cursor-pointer ${
+              className={`flex flex-col items-center w-24 align-middle justify-center transition-all rounded-lg cursor-pointer h-24 ${
                 selectedSocialMedia === "instagram"
-                  ? "bg-gray-300 border-pink-500"
+                  ? "bg-sky-200 border-pink-500"
                   : "bg-gray-100 border-gray-300 hover:bg-gray-200"
               }`}
             >
@@ -81,9 +81,9 @@ export const CreateSentimentModel = (props) => {
 
             {/* YouTube Option */}
             <label
-              className={`flex flex-col items-center p-4 transition-all rounded-lg cursor-pointer ${
+              className={`flex flex-col items-center w-24 align-middle justify-center transition-all rounded-lg cursor-pointer h-24 ${
                 selectedSocialMedia === "youtube"
-                  ? "bg-gray-300 border-red-500"
+                  ? "bg-sky-200 border-red-500"
                   : "bg-gray-100 border-gray-300 hover:bg-gray-200"
               }`}
             >
@@ -96,6 +96,29 @@ export const CreateSentimentModel = (props) => {
               />
               <img src={youtubeImg} alt="YouTube" className="w-12 h-12 mb-2" />
               <span className="text-sm font-medium">YouTube</span>
+            </label>
+
+            {/* Googlemaps Option */}
+            <label
+              className={`flex flex-col items-center w-24 align-middle justify-center transition-all rounded-lg cursor-pointer h-24 ${
+                selectedSocialMedia === "googlemaps"
+                  ? "bg-sky-200 border-red-500"
+                  : "bg-gray-100 border-gray-300 hover:bg-gray-200"
+              }`}
+            >
+              <input
+                type="radio"
+                name="socialMedia"
+                value="googlemaps"
+                className="hidden peer"
+                onChange={handleSocialMediaChange}
+              />
+              <img
+                src={googlemapsImg}
+                alt="GoogleMaps"
+                className="w-12 h-12 mb-2"
+              />
+              <span className="text-sm font-medium">Google Maps</span>
             </label>
           </div>
 
@@ -128,11 +151,14 @@ export const CreateSentimentModel = (props) => {
           <div className="flex flex-col gap-2">
             Tags
             <div className="flex flex-row flex-wrap gap-2 p-3 rounded-lg bg-slate-50">
-              {props.tags.map((item) => {
+              {props.tags.map((item, index) => {
                 return (
-                  <label className="flex items-center text-sm font-medium transition-colors rounded-full cursor-pointer">
+                  <label
+                    className="flex items-center text-sm font-medium transition-colors rounded-full cursor-pointer"
+                    key={index}
+                  >
                     <input type="checkbox" className="hidden peer" />
-                    <span className="px-3 py-1 rounded-full peer-checked:bg-sky-200 peer-checked:text-black bg-slate-200 hover:bg-slate-300">
+                    <span className="px-3 py-1 border rounded-full peer-checked:bg-sky-200 peer-checked:text-black bg-slate-200 hover:bg-slate-300 peer-checked:border-slate-500">
                       🏷️{item.tag_name}
                     </span>
                   </label>

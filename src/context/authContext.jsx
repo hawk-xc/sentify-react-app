@@ -1,36 +1,37 @@
-// src/context/authContext.jsx
-import { createContext, useContext, useState, useEffect } from "react";
-import Cookies from "js-cookie";
+import { createContext, useState, useEffect } from "react";
 
 const AuthContext = createContext();
 
-export function AuthProvider({ children }) {
+export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
 
-  const login = (token, userData) => {
-    Cookies.set("token", token);
-    setUser(userData);
-  };
-
-  const logout = () => {
-    Cookies.remove("token");
-    setUser(null);
-  };
-
   useEffect(() => {
-    const token = Cookies.get("token");
+    // Cek apakah ada token dalam penyimpanan lokal atau state yang valid
+    const token = localStorage.getItem("token");
     if (token) {
-      setUser({ name: "Dummy User", email: "dummy@example.com" });
+      // Coba untuk memverifikasi token dan mendapatkan informasi pengguna
+      fetch("/api/auth/verify", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          if (data.status === "success") {
+            setUser(data.user);
+          } else {
+            localStorage.removeItem("token");
+          }
+        })
+        .catch(() => localStorage.removeItem("token"));
     }
   }, []);
 
   return (
-    <AuthContext.Provider value={{ user, login, logout }}>
-      {children}
-    </AuthContext.Provider>
+    <AuthContext.Provider value={{ user }}>{children}</AuthContext.Provider>
   );
-}
+};
 
-export function useAuth() {
-  return useContext(AuthContext);
-}
+export default AuthContext;

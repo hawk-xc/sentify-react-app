@@ -4,6 +4,7 @@ import tiktokImg from "../assets/images/tiktok.png";
 import instagramImg from "../assets/images/instagram.jpeg";
 import youtubeImg from "../assets/images/youtube.png";
 import googlemapsImg from "../assets/images/googlemaps.png";
+import SentimentDetailPages from "./SentimentDetailPages";
 import { CreateSentimentModel as CreateSentimentModel } from "../particles/models";
 import { CreateTagModel as CreateTagModel } from "../particles/models";
 
@@ -12,6 +13,7 @@ const SentimentPages = () => {
   const [sentiment, setSentiment] = useState([]); // Semua data sentiment (default semua)
   const [activeTag, setActiveTag] = useState(null); // unique_id tag aktif
   const [isLoading, setIsLoading] = useState(false); // Loading state
+  const [detailSentiment, setDetailSentiment] = useState(null);
 
   // Fetch semua tag saat komponen dimuat
   const fetchTags = async () => {
@@ -41,10 +43,28 @@ const SentimentPages = () => {
     }
   };
 
+  const fetchSentimentDetail = async (sentimentId) => {
+    try {
+      const response = await axiosClient.get(`/sentiment/${sentimentId}/all`);
+      setDetailSentiment(response.data.data); // Simpan data detail
+    } catch (error) {
+      console.error("Failed to fetch sentiment details:", error);
+    }
+  };
+
   useEffect(() => {
     fetchTags(); // Ambil semua tag
     fetchSentiment(); // Ambil semua sentiment secara default
   }, []);
+
+  const handleSentimentClick = (sentimentId) => {
+    console.log(sentimentId);
+    fetchSentimentDetail(sentimentId); // Ambil detail sentiment
+  };
+
+  const handleBackToSentiments = () => {
+    setDetailSentiment(null); // Kembali ke daftar sentiment
+  };
 
   const handleTagClick = (uniqueId) => {
     setActiveTag(uniqueId); // Tandai tag aktif
@@ -68,6 +88,37 @@ const SentimentPages = () => {
 
   return (
     <div className="py-5">
+      {detailSentiment ? (
+        <SentimentDetailPages
+          handleBackToSentiments={handleBackToSentiments}
+          detailSentiment={detailSentiment}
+        />
+      ) : (
+        <SentimentList
+          tags={tags}
+          sentiment={sentiment}
+          handleSentimentClick={handleSentimentClick}
+          handleTagClick={handleTagClick}
+          activeTag={activeTag}
+          isLoading={isLoading}
+          getImage={getImage}
+        />
+      )}
+    </div>
+  );
+};
+
+const SentimentList = ({
+  tags,
+  sentiment,
+  handleSentimentClick,
+  handleTagClick,
+  activeTag,
+  isLoading,
+  getImage,
+}) => {
+  return (
+    <div>
       <CreateSentimentModel tags={tags} />
       <CreateTagModel />
       <div className="grid grid-cols-12 gap-5">
@@ -89,9 +140,9 @@ const SentimentPages = () => {
               >
                 🏷️All
               </button>
-              {tags.map((tag) => (
+              {tags.map((tag, index) => (
                 <button
-                  key={tag.unique_id}
+                  key={index}
                   onClick={() => handleTagClick(tag.unique_id)}
                   className={`flex flex-row gap-1 m-1 px-3 py-2 rounded-box ${
                     activeTag === tag.unique_id
@@ -122,8 +173,16 @@ const SentimentPages = () => {
           {isLoading ? (
             <p>Loading sentiment data...</p>
           ) : sentiment.length > 0 ? (
-            sentiment.map((item) => (
-              <div key={item.sentiment_id} className="flex flex-col gap-5">
+            sentiment.map((item, index) => (
+              <div
+                key={index}
+                className="flex flex-col gap-5"
+                onClick={() =>
+                  handleSentimentClick(
+                    item.unique_id || item.sentiment_unique_id
+                  )
+                }
+              >
                 <div className="flex items-center my-1 duration-150 menu bg-base-200 active:bg-base-300 active:scale-95 lg:menu-horizontal rounded-box">
                   <li className="justify-between w-full active:bg-base-300">
                     <span

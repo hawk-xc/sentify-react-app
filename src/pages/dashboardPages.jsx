@@ -4,9 +4,11 @@ import { useState, useEffect } from "react";
 
 const DashboardPages = () => {
   const pages = ["dashboard", "profile", "sentiment", "tags"];
-  
+
   // Ambil halaman terakhir dari localStorage atau fallback ke "dashboard"
-  const [page, setPage] = useState(() => localStorage.getItem("currentPage") || "dashboard");
+  const [page, setPage] = useState(
+    () => localStorage.getItem("currentPage") || "dashboard"
+  );
 
   // Simpan state `page` ke localStorage setiap kali berubah
   useEffect(() => {
@@ -27,7 +29,7 @@ const DashboardPages = () => {
   };
 
   return (
-    <div className="w-full h-screen bg-slate-100">
+    <div className="w-full h-full bg-slate-100">
       <NavbarSectionPart pages={pages} setPage={setPage} page={page} />
       <div className="max-sm:p-5 md:px-56">{renderContent()}</div>
     </div>
