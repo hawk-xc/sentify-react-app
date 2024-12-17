@@ -1,24 +1,16 @@
-import React, { useState, useEffect } from "react";
+import { useState } from "react";
 import axiosClient from "../api/axiosClient";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "../context/authContext";
-import Cookies from "js-cookie";
+import { useAuth } from "../context/AuthProvider";
 
 export default function Login() {
-  const { login, user, loading } = useAuth();
+  const { login } = useAuth();
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-
-  useEffect(() => {
-    const token = Cookies.get("token");
-    // if (!loading && (user || token) && window.location.pathname === "/login") {
-    //   navigate("/dashboard", { replace: true });
-    // }
-  }, [user, loading, navigate]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -32,6 +24,7 @@ export default function Login() {
         const { token } = response.data;
         login(token);
         setIsLoading(false);
+        navigate("/", { replace: true });
       }
     } catch (error) {
       setIsLoading(false);

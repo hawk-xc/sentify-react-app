@@ -2,7 +2,8 @@ import userImage from "../assets/images/users.png";
 import { useState, useEffect } from "react";
 import axiosClient from "../api/axiosClient";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "../context/authContext";
+import { useAuth } from "../context/AuthProvider";
+import Cookies from "js-cookie";
 
 // eslint-disable-next-line react/prop-types
 const NavbarSectionPart = ({ pages, setPage, page }) => {
@@ -11,9 +12,10 @@ const NavbarSectionPart = ({ pages, setPage, page }) => {
   const navigate = useNavigate();
 
   const handleLogout = () => {
-    logout();
-    navigate("/dashboard");
-  }
+    logout(); // Logout dari context
+    Cookies.remove("token"); // Hapus token di cookie
+    navigate("/login", { replace: true }); // Arahkan ke halaman login
+  };
 
   useEffect(() => {
     let isMounted = true;
