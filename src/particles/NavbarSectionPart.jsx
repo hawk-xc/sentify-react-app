@@ -1,10 +1,19 @@
 import userImage from "../assets/images/users.png";
 import { useState, useEffect } from "react";
-import axiosClient from "../api/axiosClient"; // Pastikan axios sudah dikonfigurasi
+import axiosClient from "../api/axiosClient";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../context/authContext";
 
 // eslint-disable-next-line react/prop-types
 const NavbarSectionPart = ({ pages, setPage, page }) => {
   const [user, setUser] = useState(null);
+  const { logout } = useAuth();
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    logout();
+    navigate("/dashboard");
+  }
 
   useEffect(() => {
     let isMounted = true;
@@ -44,8 +53,17 @@ const NavbarSectionPart = ({ pages, setPage, page }) => {
         </ul>
       </div>
       <div className="flex items-center gap-2 navbar-end">
-        <span>Hi, {user?.data[0]?.username || "Guest"}</span>
-        <img src={userImage} alt="User Avatar" className="w-12 rounded-full" />
+        <div className="dropdown">
+          <div tabIndex="0" role="button" className="flex flex-row items-center gap-3">
+            <span>Hi, {user?.data[0]?.username || "Guest"}</span>
+            <img src={userImage} alt="User Avatar" className="w-12 rounded-full" />
+          </div>
+          <ul tabIndex="0" className="dropdown-content menu bg-base-100 rounded-box z-[1] w-36 p-2 shadow">
+            <li>
+              <a onClick={handleLogout}>Logout</a>
+            </li>
+          </ul>
+        </div>
       </div>
     </div>
   );

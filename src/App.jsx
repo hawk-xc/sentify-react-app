@@ -1,23 +1,18 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import { AuthProvider } from "./context/authContext.js";
+import { AuthProvider } from "./context/authContext.jsx";
 import PrivateRoute from "./components/PrivateRoute.jsx";
 import LoginPage from "./pages/loginPages.jsx";
-import Dashboard from "./pages/dashboardPages.jsx";
+import DashboardPages from "./pages/dashboardPages.jsx";
 
 function App() {
   return (
     <AuthProvider>
-      <Router>
+      <Router future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
         <Routes>
           <Route path="/login" element={<LoginPage />} />
-          <Route
-            path="/dashboard"
-            element={
-              <PrivateRoute>
-                <Dashboard />
-              </PrivateRoute>
-            }
-          />
+          <Route element={<PrivateRoute />}>
+            <Route path="/dashboard" element={<DashboardPages />} />
+          </Route>
         </Routes>
       </Router>
     </AuthProvider>

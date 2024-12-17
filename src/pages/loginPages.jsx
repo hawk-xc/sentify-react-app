@@ -1,4 +1,3 @@
-// src/pages/Login.jsx
 import React, { useState, useEffect } from "react";
 import axiosClient from "../api/axiosClient";
 import { useNavigate } from "react-router-dom";
@@ -6,21 +5,19 @@ import { useAuth } from "../context/authContext";
 import Cookies from "js-cookie";
 
 export default function Login() {
-  const { login, user } = useAuth();
+  const { login, user, loading } = useAuth();
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
 
-  // Redirect jika user sudah login atau token valid
   useEffect(() => {
     const token = Cookies.get("token");
-    if ((user || token) && window.location.pathname === "/login") {
-      console.log("User authenticated, redirecting to dashboard");
-      navigate("/dashboard", { replace: true }); // Hindari kembali ke login
+    if (!loading && (user || token) && window.location.pathname === "/login") {
+      navigate("/dashboard", { replace: true });
     }
-  }, [user, navigate]);
+  }, [user, loading, navigate]);  
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -29,15 +26,14 @@ export default function Login() {
         email,
         password,
       });
-
-      const { token, user } = response.data;
-      console.log("Login successful:", response.data);
-      login(token, user); // Simpan user dan token di context
-      navigate("/dashboard"); // Redirect setelah login berhasil
+      if (response.status === 200) {
+        const { token } = response.data;
+        login(token);
+        navigate("/dashboard");
+      }
     } catch (error) {
-      console.error("Login failed:", error.response?.data?.message);
       setErrorMessage(error.response?.data?.message || "Login failed");
-      document.getElementById("my_modal_3").showModal(); // Tampilkan modal error
+      document.getElementById("my_modal_3").showModal();
     }
   };
 
@@ -45,7 +41,6 @@ export default function Login() {
     <div className="flex flex-row flex-wrap items-center h-screen font-sans max-sm:w-screen justify-evenly bg-slate-100">
       <div className="flex justify-center align-middle bg-white shadow-2xl card">
         <div className="card-body">
-          {/* Modal DaisyUI */}
           <dialog id="my_modal_3" className="modal">
             <div className="modal-box">
               <form method="dialog">

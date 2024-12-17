@@ -5,26 +5,28 @@ import { useState, useEffect } from "react";
 const DashboardPages = () => {
   const pages = ["dashboard", "profile", "sentiment", "tags"];
 
-  // Ambil halaman terakhir dari localStorage atau fallback ke "dashboard"
-  const [page, setPage] = useState(
-    () => localStorage.getItem("currentPage") || "dashboard"
-  );
+  const [page, setPage] = useState(() => {
+    const storedPage = localStorage.getItem("currentPage");
+    return pages.includes(storedPage) ? storedPage : "dashboard"; // Fallback
+  });
 
-  // Simpan state `page` ke localStorage setiap kali berubah
   useEffect(() => {
+    console.log("Saving to localStorage:", page);
     localStorage.setItem("currentPage", page);
   }, [page]);
 
   const renderContent = () => {
     switch (page) {
-      case pages[1]:
+      case "profile":
         return <div>Your Profile Details</div>;
-      case pages[2]:
+      case "sentiment":
         return <SentimentPages />;
-      case pages[3]:
+      case "tags":
         return <div>Your Tags</div>;
-      default:
+      case "dashboard":
         return <div>Welcome to Home</div>;
+      default:
+        return <div>Page Not Found</div>; // Fallback page
     }
   };
 
