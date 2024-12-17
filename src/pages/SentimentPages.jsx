@@ -9,46 +9,48 @@ import { CreateSentimentModel as CreateSentimentModel } from "../particles/model
 import { CreateTagModel as CreateTagModel } from "../particles/models";
 
 const SentimentPages = () => {
-  const [tags, setTags] = useState([]); // Semua tag
-  const [sentiment, setSentiment] = useState([]); // Semua data sentiment (default semua)
-  const [activeTag, setActiveTag] = useState(null); // unique_id tag aktif
-  const [isLoading, setIsLoading] = useState(false); // Loading state
+  const [tags, setTags] = useState([]);
+  const [sentiment, setSentiment] = useState([]);
+  const [activeTag, setActiveTag] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [detailLoading, setDetailLoading] = useState(false);
   const [detailSentiment, setDetailSentiment] = useState(null);
 
-  // Fetch semua tag saat komponen dimuat
   const fetchTags = async () => {
     try {
       const response = await axiosClient.get("/tags");
-      setTags(response.data.data); // Pastikan mengakses array data
+      setTags(response.data.data);
     } catch (error) {
       console.error("Failed to fetch tags:", error);
     }
   };
 
-  // Fetch sentiment berdasarkan tag ID atau default semua
   const fetchSentiment = async (tagId = null) => {
-    setIsLoading(true); // Mulai loading
+    setIsLoading(true);
     try {
       if (tagId) {
         const response = await axiosClient.get(`/tags/${tagId}`);
-        setSentiment(response.data.data); // Update data sentiment berdasarkan tag
+        setSentiment(response.data.data);
       } else {
         const response = await axiosClient.get("/sentiment");
-        setSentiment(response.data.data); // Default data sentiment semua
+        setSentiment(response.data.data);
       }
     } catch (error) {
       console.error("Failed to fetch sentiment:", error);
     } finally {
-      setIsLoading(false); // Selesai loading
+      setIsLoading(false);
     }
   };
 
   const fetchSentimentDetail = async (sentimentId) => {
+    setDetailLoading(true);
     try {
       const response = await axiosClient.get(`/sentiment/${sentimentId}/all`);
-      setDetailSentiment(response.data.data); // Simpan data detail
+      setDetailSentiment(response.data.data);
     } catch (error) {
       console.error("Failed to fetch sentiment details:", error);
+    } finally {
+      setDetailLoading(false);
     }
   };
 
@@ -58,12 +60,12 @@ const SentimentPages = () => {
   }, []);
 
   const handleSentimentClick = (sentimentId) => {
-    console.log(sentimentId);
-    fetchSentimentDetail(sentimentId); // Ambil detail sentiment
+    setDetailLoading(true);
+    fetchSentimentDetail(sentimentId);
   };
 
   const handleBackToSentiments = () => {
-    setDetailSentiment(null); // Kembali ke daftar sentiment
+    setDetailSentiment(null);
   };
 
   const handleTagClick = (uniqueId) => {
@@ -115,6 +117,7 @@ const SentimentList = ({
   handleTagClick,
   activeTag,
   isLoading,
+  detailLoading,
   getImage,
 }) => {
   return (
@@ -123,7 +126,7 @@ const SentimentList = ({
       <CreateTagModel />
       <div className="grid grid-cols-12 gap-5">
         <div className="flex flex-col col-span-3 p-5 bg-white rounded-lg shadow-lg">
-          <h2 className="mb-3 text-3xl font-extrabold">🏷️My Tags</h2>
+          <h2 className="mb-3 text-3xl font-extrabold">🏷️ My Tags</h2>
           <button
             className="mb-3 shadow-md btn bg-sky-100 hover:bg-sky-200"
             onClick={() => document.getElementById("my_modal_2").showModal()}
@@ -134,44 +137,79 @@ const SentimentList = ({
             <div className="flex flex-row flex-wrap">
               <button
                 onClick={() => handleTagClick(null)}
-                className={`flex flex-row gap-1 m-1 p-2 rounded-box ${
-                  activeTag === null ? "bg-blue-500 text-white" : "bg-base-200"
-                }`}
+                className={`flex flex-row gap-1 m-1 p-2 rounded-box ${activeTag === null ? "bg-blue-500 text-white" : "bg-base-200"
+                  }`}
               >
-                🏷️All
+                🏷️ All
               </button>
               {tags.map((tag, index) => (
                 <button
                   key={index}
                   onClick={() => handleTagClick(tag.unique_id)}
-                  className={`flex flex-row gap-1 m-1 px-3 py-2 rounded-box ${
-                    activeTag === tag.unique_id
-                      ? "bg-blue-500 text-white"
-                      : "bg-base-200"
-                  }`}
+                  className={`flex flex-row gap-1 m-1 px-3 py-2 rounded-box ${activeTag === tag.unique_id
+                    ? "bg-blue-500 text-white"
+                    : "bg-base-200"
+                    }`}
                 >
-                  🏷️{tag.tag_name}
+                  🏷️ {tag.tag_name}
                 </button>
               ))}
             </div>
           ) : (
-            <p>Loading tags...</p>
+            <div className="w-full flex justify-center align-middle items-center h-full flex-col">
+              <span className="loading loading-ring loading-lg"></span>
+              Loading...
+            </div>
           )}
         </div>
 
         {/* My Sentiment */}
         <div className="flex flex-col col-span-6 p-5 bg-white rounded-lg shadow-lg">
           <div className="flex flex-row items-center justify-between">
-            <h2 className="mb-3 text-3xl font-extrabold">😃My Sentiment</h2>
+            <h2 className="mb-3 text-3xl font-extrabold">😃 My Sentiment</h2>
             <button
               className="mb-3 shadow-md btn bg-sky-100 hover:bg-sky-200"
               onClick={() => document.getElementById("my_modal_1").showModal()}
             >
-              Add Sentiment➕
+              Add Sentiment ➕
             </button>
           </div>
-          {isLoading ? (
-            <p>Loading sentiment data...</p>
+          {detailLoading ? (
+            <div className="w-full flex justify-center align-middle items-center h-full flex-col">
+              <span className="loading loading-ring loading-lg"></span>
+              Loading Details...
+            </div>
+          ) : isLoading ? (
+            <div className="w-full flex justify-center align-middle items-center h-full flex-col gap-4">
+              <div className="flex items-center gap-4 w-full">
+                <div className="skeleton h-16 w-16 shrink-0 rounded-full"></div>
+                <div className="flex flex-col gap-4 w-full">
+                  <div className="skeleton h-4 w-96"></div>
+                  <div className="skeleton h-4 w-full"></div>
+                </div>
+              </div>
+              <div className="flex items-center gap-4 w-full">
+                <div className="skeleton h-16 w-16 shrink-0 rounded-full"></div>
+                <div className="flex flex-col gap-4 w-full">
+                  <div className="skeleton h-4 w-96"></div>
+                  <div className="skeleton h-4 w-full"></div>
+                </div>
+              </div>
+              <div className="flex items-center gap-4 w-full">
+                <div className="skeleton h-16 w-16 shrink-0 rounded-full"></div>
+                <div className="flex flex-col gap-4 w-full">
+                  <div className="skeleton h-4 w-96"></div>
+                  <div className="skeleton h-4 w-full"></div>
+                </div>
+              </div>
+              <div className="flex items-center gap-4 w-full">
+                <div className="skeleton h-16 w-16 shrink-0 rounded-full"></div>
+                <div className="flex flex-col gap-4 w-full">
+                  <div className="skeleton h-4 w-96"></div>
+                  <div className="skeleton h-4 w-full"></div>
+                </div>
+              </div>
+            </div>
           ) : sentiment.length > 0 ? (
             sentiment.map((item, index) => (
               <div
@@ -212,13 +250,15 @@ const SentimentList = ({
               </div>
             ))
           ) : (
-            <p>No sentiment data available.</p>
+            <div className="w-full flex justify-center align-middle items-center h-full flex-col">
+              <span className="loading loading-ring loading-lg"></span>
+              Keep Searching Data...
+            </div>
           )}
         </div>
 
-        {/* Statistic */}
         <div className="col-span-3 p-5 bg-white rounded-lg shadow-lg">
-          <h2 className="mb-3 text-3xl font-extrabold">🔎Statistic</h2>
+          <h2 className="mb-3 text-3xl font-extrabold">🔎 Statistic</h2>
         </div>
       </div>
     </div>

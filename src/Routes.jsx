@@ -11,7 +11,7 @@ function Routes() {
 
   const routesForPublic = [
     {
-      path: "/show",
+      path: "/info",
       element: <div>Fitri</div>,
     },
   ];
