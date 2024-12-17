@@ -1,4 +1,4 @@
-import { RouterProvider, createBrowserRouter } from "react-router-dom";
+import { RouterProvider, createBrowserRouter, Navigate } from "react-router-dom";
 import { useAuth } from "./context/AuthProvider.jsx";
 import { PrivateRoute } from "./components/PrivateRoute.jsx";
 import LoginPage from "./pages/loginPages";
@@ -11,7 +11,7 @@ function Routes() {
 
   const routesForPublic = [
     {
-      path: "/news",
+      path: "/show",
       element: <div>Fitri</div>,
     },
   ];
@@ -23,7 +23,7 @@ function Routes() {
       children: [
         {
           path: "/",
-          element: <DashboardPages />,
+          element: <Navigate to="/dashboard" replace />,
         },
         {
           path: "/dashboard",
@@ -34,6 +34,10 @@ function Routes() {
   ];
 
   const routesForNotAuthenticatedOnly = [
+    {
+      path: "/",
+      element: <Navigate to="/login" replace />,
+    },
     {
       path: "/login",
       element: <LoginPage />,
