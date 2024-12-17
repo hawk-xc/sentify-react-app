@@ -11,17 +11,19 @@ export default function Login() {
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     const token = Cookies.get("token");
-    if (!loading && (user || token) && window.location.pathname === "/login") {
-      navigate("/dashboard", { replace: true });
-    }
-  }, [user, loading, navigate]);  
+    // if (!loading && (user || token) && window.location.pathname === "/login") {
+    //   navigate("/dashboard", { replace: true });
+    // }
+  }, [user, loading, navigate]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      setIsLoading(true);
       const response = await axiosClient.post("/login", {
         email,
         password,
@@ -29,9 +31,10 @@ export default function Login() {
       if (response.status === 200) {
         const { token } = response.data;
         login(token);
-        navigate("/dashboard");
+        setIsLoading(false);
       }
     } catch (error) {
+      setIsLoading(false);
       setErrorMessage(error.response?.data?.message || "Login failed");
       document.getElementById("my_modal_3").showModal();
     }
@@ -68,6 +71,7 @@ export default function Login() {
                   placeholder="email@example.com"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
+                  disabled={isLoading}
                   required
                 />
               </label>
@@ -81,6 +85,7 @@ export default function Login() {
                   placeholder="Enter password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
+                  disabled={isLoading}
                   required
                 />
                 <button
@@ -93,8 +98,8 @@ export default function Login() {
               </label>
             </div>
             <div className="mt-6 form-control">
-              <button className="btn btn-primary" type="submit">
-                Login
+              <button className="btn btn-primary" type="submit" disabled={isLoading}>
+                {isLoading ? (<span className="loading loading-dots loading-lg"></span>) : "Login"}
               </button>
             </div>
           </form>
