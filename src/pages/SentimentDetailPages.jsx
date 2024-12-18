@@ -1,3 +1,9 @@
+import PieChart from "../particles/ReactionPieChart";
+import tiktokImg from "../assets/images/tiktok.png";
+import instagramImg from "../assets/images/instagram.jpeg";
+import youtubeImg from "../assets/images/youtube.png";
+import googlemapsImg from "../assets/images/googlemaps.png";
+
 const SentimentDetailPages = ({ detailSentiment, handleBackToSentiments }) => {
   const reaction = {
     positive: detailSentiment.statistic.data.positive,
@@ -35,6 +41,21 @@ const SentimentDetailPages = ({ detailSentiment, handleBackToSentiments }) => {
     }
   };
 
+  const getImage = (platform) => {
+    switch (platform) {
+      case "instagram":
+        return instagramImg;
+      case "tiktok":
+        return tiktokImg;
+      case "youtube":
+        return youtubeImg;
+      case "googlemaps":
+        return googlemapsImg;
+      default:
+        return null;
+    }
+  };
+
   console.log(detailSentiment);
   return (
     <div className="p-5 bg-white rounded-lg shadow-lg">
@@ -65,7 +86,7 @@ const SentimentDetailPages = ({ detailSentiment, handleBackToSentiments }) => {
         </div>
         <hr className="w-full border" />
         <div className="flex flex-row justify-between p-5">
-          <div className="flex flex-row gap-32">
+          <div className="flex flex-row justify-between w-full">
             <div className="flex flex-col gap-2">
               <span className="font-semibold text-blue-400">
                 Status <i class="ri-arrow-down-s-line"></i>
@@ -77,12 +98,25 @@ const SentimentDetailPages = ({ detailSentiment, handleBackToSentiments }) => {
             </div>
             <div className="flex flex-col gap-2">
               <span className="font-semibold text-blue-400">
+                Platform <i class="ri-arrow-down-s-line"></i>
+              </span>
+              <span className="flex flex-row items-center justify-center gap-2 p-4 align-middle badge border-slate-200">
+                <img
+                  src={getImage(detailSentiment.platform)}
+                  className="w-5"
+                  alt=""
+                />
+                {detailSentiment.platform}
+              </span>
+            </div>
+            <div className="flex flex-col gap-2">
+              <span className="font-semibold text-blue-400">
                 Reaction Avg <i class="ri-arrow-down-s-line"></i>
               </span>
               <span className="flex flex-row items-center justify-center gap-2 p-4 align-middle badge border-slate-200">
-                {reactionOverall === "positive" && "😊"}
-                {reactionOverall === "neutral" && "😐"}
-                {reactionOverall === "negative" && "😡"}
+                {reactionOverall === "positive" && "😊 "}
+                {reactionOverall === "neutral" && "😐 "}
+                {reactionOverall === "negative" && "😡 "}
                 {reactionOverall}
               </span>
             </div>
@@ -105,13 +139,19 @@ const SentimentDetailPages = ({ detailSentiment, handleBackToSentiments }) => {
           </div>
         </div>
       </div>
-      <div></div>
-      <p>Platform: {detailSentiment.platform}</p>
-      <p>Created At: {detailSentiment.created_at}</p>
-      <p>
-        Details: {detailSentiment.details || "No additional details provided."}
-      </p>
-      <div className="w-full p-5 rounded-lg bg-orange-50">
+      <div className="flex flex-col gap-2 p-5 mt-3 border rounded-lg shadow-sm border-slate-200">
+        <h1 className="text-xl">Resumes</h1>
+        <span className="flex flex-row gap-2">
+          {detailSentiment.statistic.data.key_words.graph_positive.map(
+            (item, index) => (
+              <div class="badge badge-neutral">{item.tagname}</div>
+            )
+          )}
+        </span>
+        <span className="">{detailSentiment.statistic.data.resume}</span>
+      </div>
+      {/* <PieChart /> */}
+      <div className="w-full p-5 mt-5 rounded-lg bg-orange-50">
         <h3 className="mb-3">Comments</h3>
         <div className="flex flex-wrap w-full gap-4">
           {detailSentiment.comments.map((comment, index) => (
