@@ -10,7 +10,30 @@ const SentimentDetailPages = ({ detailSentiment, handleBackToSentiments }) => {
     (key) => reaction[key] === Math.max(...Object.values(reaction))
   );
 
-  console.log(reactionOverall);
+  const timeAgo = (date) => {
+    const now = new Date();
+    const timeDifference = now - new Date(date);
+    const seconds = Math.floor(timeDifference / 1000);
+    const minutes = Math.floor(seconds / 60);
+    const hours = Math.floor(minutes / 60);
+    const days = Math.floor(hours / 24);
+    const months = Math.floor(days / 30);
+    const years = Math.floor(days / 365);
+
+    if (seconds < 60) {
+      return `${seconds} seconds ago`;
+    } else if (minutes < 60) {
+      return `${minutes} minutes ago`;
+    } else if (hours < 24) {
+      return `${hours} hours ago`;
+    } else if (days < 30) {
+      return `${days} days ago`;
+    } else if (months < 12) {
+      return `${months} months ago`;
+    } else {
+      return `${years} years ago`;
+    }
+  };
 
   console.log(detailSentiment);
   return (
@@ -42,10 +65,10 @@ const SentimentDetailPages = ({ detailSentiment, handleBackToSentiments }) => {
         </div>
         <hr className="w-full border" />
         <div className="flex flex-row justify-between p-5">
-          <div>
+          <div className="flex flex-row gap-32">
             <div className="flex flex-col gap-2">
               <span className="font-semibold text-blue-400">
-                <i class="ri-information-line"></i> Status
+                Status <i class="ri-arrow-down-s-line"></i>
               </span>
               <span className="flex flex-row items-center justify-center gap-2 p-4 align-middle badge border-slate-200">
                 <span className="badge badge-xs badge-success"></span>
@@ -54,11 +77,29 @@ const SentimentDetailPages = ({ detailSentiment, handleBackToSentiments }) => {
             </div>
             <div className="flex flex-col gap-2">
               <span className="font-semibold text-blue-400">
-                <i class="ri-time-line"></i> Reaction
+                Reaction Avg <i class="ri-arrow-down-s-line"></i>
               </span>
               <span className="flex flex-row items-center justify-center gap-2 p-4 align-middle badge border-slate-200">
-                <span className="badge badge-xs badge-success"></span>
+                {reactionOverall === "positive" && "😊"}
+                {reactionOverall === "neutral" && "😐"}
+                {reactionOverall === "negative" && "😡"}
                 {reactionOverall}
+              </span>
+            </div>
+            <div className="flex flex-col gap-2">
+              <span className="font-semibold text-blue-400">
+                Limit Total <i class="ri-arrow-down-s-line"></i>
+              </span>
+              <span className="flex flex-row items-center justify-center gap-2 p-4 align-middle badge border-slate-200">
+                💬 {detailSentiment.comments_limit}
+              </span>
+            </div>
+            <div className="flex flex-col gap-2">
+              <span className="font-semibold text-blue-400">
+                Created At <i class="ri-arrow-down-s-line"></i>
+              </span>
+              <span className="flex flex-row items-center justify-center gap-2 p-4 align-middle badge border-slate-200">
+                ⏲️ {timeAgo(detailSentiment.sentiment_created_at)}
               </span>
             </div>
           </div>
