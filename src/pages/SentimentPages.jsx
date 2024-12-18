@@ -5,8 +5,8 @@ import instagramImg from "../assets/images/instagram.jpeg";
 import youtubeImg from "../assets/images/youtube.png";
 import googlemapsImg from "../assets/images/googlemaps.png";
 import SentimentDetailPages from "./SentimentDetailPages";
-import { CreateSentimentModel as CreateSentimentModel } from "../particles/models";
-import { CreateTagModel as CreateTagModel } from "../particles/models";
+import { CreateSentimentModel } from "../particles/models";
+import { CreateTagModel } from "../particles/models";
 
 const SentimentPages = () => {
   const [tags, setTags] = useState([]);
@@ -28,13 +28,8 @@ const SentimentPages = () => {
   const fetchSentiment = async (tagId = null) => {
     setIsLoading(true);
     try {
-      if (tagId) {
-        const response = await axiosClient.get(`/tags/${tagId}`);
-        setSentiment(response.data.data);
-      } else {
-        const response = await axiosClient.get("/sentiment");
-        setSentiment(response.data.data);
-      }
+      const response = await axiosClient.get(tagId ? `/tags/${tagId}` : "/sentiment");
+      setSentiment(response.data.data);
     } catch (error) {
       console.error("Failed to fetch sentiment:", error);
     } finally {
@@ -43,7 +38,6 @@ const SentimentPages = () => {
   };
 
   const fetchSentimentDetail = async (sentimentId) => {
-    setDetailLoading(true);
     try {
       const response = await axiosClient.get(`/sentiment/${sentimentId}/all`);
       setDetailSentiment(response.data.data);
@@ -55,8 +49,8 @@ const SentimentPages = () => {
   };
 
   useEffect(() => {
-    fetchTags(); // Ambil semua tag
-    fetchSentiment(); // Ambil semua sentiment secara default
+    fetchTags();
+    fetchSentiment();
   }, []);
 
   const handleSentimentClick = (sentimentId) => {
@@ -69,8 +63,8 @@ const SentimentPages = () => {
   };
 
   const handleTagClick = (uniqueId) => {
-    setActiveTag(uniqueId); // Tandai tag aktif
-    fetchSentiment(uniqueId); // Fetch data sentiment berdasarkan tag
+    setActiveTag(uniqueId);
+    fetchSentiment(uniqueId);
   };
 
   const getImage = (platform) => {
@@ -103,6 +97,7 @@ const SentimentPages = () => {
           handleTagClick={handleTagClick}
           activeTag={activeTag}
           isLoading={isLoading}
+          detailLoading={detailLoading}
           getImage={getImage}
         />
       )}
@@ -137,19 +132,15 @@ const SentimentList = ({
             <div className="flex flex-row flex-wrap">
               <button
                 onClick={() => handleTagClick(null)}
-                className={`flex flex-row gap-1 m-1 p-2 rounded-box ${activeTag === null ? "bg-blue-500 text-white" : "bg-base-200"
-                  }`}
+                className={`flex flex-row gap-1 m-1 p-2 rounded-box ${activeTag === null ? "bg-blue-500 text-white" : "bg-base-200"}`}
               >
                 🏷️ All
               </button>
               {tags.map((tag, index) => (
                 <button
                   key={index}
-                  onClick={() => handleTagClick(tag.unique_id)}
-                  className={`flex flex-row gap-1 m-1 px-3 py-2 rounded-box ${activeTag === tag.unique_id
-                    ? "bg-blue-500 text-white"
-                    : "bg-base-200"
-                    }`}
+                  onClick={() => detailLoading ? null : handleTagClick(tag.unique_id)}
+                  className={`flex flex-row gap-1 m-1 px-3 py-2 rounded-box ${activeTag === tag.unique_id ? "bg-blue-500 text-white" : "bg-base-200"}`}
                 >
                   🏷️ {tag.tag_name}
                 </button>
@@ -163,7 +154,6 @@ const SentimentList = ({
           )}
         </div>
 
-        {/* My Sentiment */}
         <div className="flex flex-col col-span-6 p-5 bg-white rounded-lg shadow-lg">
           <div className="flex flex-row items-center justify-between">
             <h2 className="mb-3 text-3xl font-extrabold">😃 My Sentiment</h2>
@@ -175,40 +165,14 @@ const SentimentList = ({
             </button>
           </div>
           {detailLoading ? (
-            <div className="w-full flex justify-center align-middle items-center h-full flex-col">
+            <div className="w-full duration-150 transition-all flex justify-center align-middle items-center h-full flex-col">
               <span className="loading loading-ring loading-lg"></span>
-              Loading Details...
+              Loading details...
             </div>
           ) : isLoading ? (
-            <div className="w-full flex justify-center align-middle items-center h-full flex-col gap-4">
-              <div className="flex items-center gap-4 w-full">
-                <div className="skeleton h-16 w-16 shrink-0 rounded-full"></div>
-                <div className="flex flex-col gap-4 w-full">
-                  <div className="skeleton h-4 w-96"></div>
-                  <div className="skeleton h-4 w-full"></div>
-                </div>
-              </div>
-              <div className="flex items-center gap-4 w-full">
-                <div className="skeleton h-16 w-16 shrink-0 rounded-full"></div>
-                <div className="flex flex-col gap-4 w-full">
-                  <div className="skeleton h-4 w-96"></div>
-                  <div className="skeleton h-4 w-full"></div>
-                </div>
-              </div>
-              <div className="flex items-center gap-4 w-full">
-                <div className="skeleton h-16 w-16 shrink-0 rounded-full"></div>
-                <div className="flex flex-col gap-4 w-full">
-                  <div className="skeleton h-4 w-96"></div>
-                  <div className="skeleton h-4 w-full"></div>
-                </div>
-              </div>
-              <div className="flex items-center gap-4 w-full">
-                <div className="skeleton h-16 w-16 shrink-0 rounded-full"></div>
-                <div className="flex flex-col gap-4 w-full">
-                  <div className="skeleton h-4 w-96"></div>
-                  <div className="skeleton h-4 w-full"></div>
-                </div>
-              </div>
+            <div className="w-full flex justify-center align-middle items-center h-full flex-col">
+              <span className="loading loading-ring loading-lg"></span>
+              Loading sentiments...
             </div>
           ) : sentiment.length > 0 ? (
             sentiment.map((item, index) => (
@@ -252,7 +216,7 @@ const SentimentList = ({
           ) : (
             <div className="w-full flex justify-center align-middle items-center h-full flex-col">
               <span className="loading loading-ring loading-lg"></span>
-              Keep Searching Data...
+              No sentiments found...
             </div>
           )}
         </div>
@@ -266,3 +230,4 @@ const SentimentList = ({
 };
 
 export default SentimentPages;
+
