@@ -1,8 +1,10 @@
-import PieChart from "../particles/ReactionPieChart";
+import BarChart from "../particles/charts/KeywordsBarChart";
+import DoughnutChart from "../particles/charts/KeywordsDoughnutChart";
 import tiktokImg from "../assets/images/tiktok.png";
 import instagramImg from "../assets/images/instagram.jpeg";
 import youtubeImg from "../assets/images/youtube.png";
 import googlemapsImg from "../assets/images/googlemaps.png";
+import StackedBarChart from "../particles/charts/StackedBarChart";
 
 const SentimentDetailPages = ({ detailSentiment, handleBackToSentiments }) => {
   const reaction = {
@@ -141,40 +143,136 @@ const SentimentDetailPages = ({ detailSentiment, handleBackToSentiments }) => {
       </div>
       <div className="flex flex-col gap-2 p-5 mt-3 border rounded-lg shadow-sm border-slate-200">
         <h1 className="text-xl">Resumes</h1>
-        <span className="flex flex-row gap-2">
-          {detailSentiment.statistic.data.key_words.graph_positive.map(
-            (item, index) => (
-              <div class="badge badge-neutral">{item.tagname}</div>
-            )
-          )}
-        </span>
         <span className="">{detailSentiment.statistic.data.resume}</span>
       </div>
-      {/* <PieChart /> */}
-      <div className="w-full p-5 mt-5 rounded-lg bg-orange-50">
-        <h3 className="mb-3">Comments</h3>
-        <div className="flex flex-wrap w-full gap-4">
-          {detailSentiment.comments.map((comment, index) => (
-            <div
-              key={index}
-              className="flex-1 p-5 rounded-lg justify-between flex shadow-md bg-sky-100 min-w-[200px] max-w-[300px] flex-col"
-            >
-              <div>
-                <span className="block font-semibold break-words text-md">
-                  {comment.name || comment.username || "Guest"}
-                </span>
-                <span className="text-xs break-words">
-                  {comment.text || "blank comment"}
-                </span>
-              </div>
-              {comment.likes > 0 ? (
-                <div className="block mt-3">👍 {comment.likes}</div>
-              ) : (
-                <div className="block mt-3">👍 0</div>
-              )}
-            </div>
-          ))}
+      <div className="flex flex-row gap-2 p-5 mt-3 border rounded-lg shadow-sm border-slate-200">
+        <div className="flex flex-row flex-wrap w-full justify-evenly">
+          <div>
+            <h1 className="text-xl">Positive Keywords</h1>
+            <BarChart
+              graphData={
+                detailSentiment.statistic.data.key_words.graph_positive
+              }
+              datasetLabel="Positive Graph Keywords"
+              colors={{ background: "rgba(102, 187, 106, 0.6)" }}
+            />
+          </div>
+          <div>
+            <h1 className="text-xl">Negative Keywords</h1>
+            <BarChart
+              graphData={
+                detailSentiment.statistic.data.key_words.graph_negative
+              }
+              datasetLabel="Negative Graph Keywords"
+            />
+          </div>
         </div>
+      </div>
+      <div className="flex flex-row gap-2 p-5 mt-3 border rounded-lg shadow-sm border-slate-200">
+        <h2 className="text-xl">Reaction</h2>
+        <div className="flex flex-row flex-wrap items-center justify-center w-full p-5 align-middle">
+          <div className="flex-1">
+            <DoughnutChart
+              data={{
+                positive: detailSentiment.statistic.data.positive,
+                neutral: detailSentiment.statistic.data.neutral,
+                negative: detailSentiment.statistic.data.negative,
+              }}
+            />
+          </div>
+          <div className="flex flex-col justify-center flex-1 px-10 align-middle gap-7">
+            <div className="flex flex-col">
+              <span className="text-lg">Top Positive Reaction</span>
+              {detailSentiment.statistic.data.topstatus.positive.length > 0
+                ? detailSentiment.statistic.data.topstatus.positive.map(
+                    (item, index) => (
+                      <div
+                        key={index}
+                        className="flex flex-col p-2 my-1 border rounded-lg shadow-md border-slate-100"
+                      >
+                        <div className="flex flex-row justify-between">
+                          <span className="font-semibold">
+                            @{item.username}
+                          </span>
+                          <span className="text-xs text-slate-500">
+                            {timeAgo(
+                              detailSentiment.comments.filter(
+                                (sentiment) =>
+                                  sentiment.username === item.username
+                              )[0].createdAt
+                            )}
+                          </span>
+                        </div>
+                        <span mb-3>{item.text}</span>
+                        {detailSentiment.comments.filter(
+                          (sentiment) => sentiment.username === item.username
+                        )[0].likes > 0 ? (
+                          <div className="block mt-3">
+                            👍{" "}
+                            {
+                              detailSentiment.comments.filter(
+                                (sentiment) =>
+                                  sentiment.username === item.username
+                              )[0].likes
+                            }
+                          </div>
+                        ) : (
+                          <div className="block mt-3">👍 0</div>
+                        )}
+                      </div>
+                    )
+                  )
+                : "No Positive Reaction"}
+            </div>
+            <div className="flex flex-col">
+              <span className="text-lg">Top Negative Reaction</span>
+              {detailSentiment.statistic.data.topstatus.negative.length > 0
+                ? detailSentiment.statistic.data.topstatus.negative.map(
+                    (item, index) => (
+                      <div
+                        key={index}
+                        className="flex flex-col p-2 my-1 border rounded-lg shadow-md border-slate-100"
+                      >
+                        <div className="flex flex-row justify-between">
+                          <span className="font-semibold">
+                            @{item.username}
+                          </span>
+                          <span className="text-xs text-slate-500">
+                            {timeAgo(
+                              detailSentiment.comments.filter(
+                                (sentiment) =>
+                                  sentiment.username === item.username
+                              )[0].createdAt
+                            )}
+                          </span>
+                        </div>
+                        <span className="mb-3">{item.text}</span>
+                        {detailSentiment.comments.filter(
+                          (sentiment) => sentiment.username === item.username
+                        )[0].likes > 0 ? (
+                          <div className="block mt-3">
+                            👍{" "}
+                            {
+                              detailSentiment.comments.filter(
+                                (sentiment) =>
+                                  sentiment.username === item.username
+                              )[0].likes
+                            }
+                          </div>
+                        ) : (
+                          <div className="block mt-3">👍 0</div>
+                        )}
+                      </div>
+                    )
+                  )
+                : "No Negative Reaction"}
+            </div>
+          </div>
+        </div>
+      </div>
+      <div className="flex flex-col gap-2 p-5 mt-3 border rounded-lg shadow-sm border-slate-200">
+        <h1 className="text-xl">Question</h1>
+        <span className="">{detailSentiment.statistic.data.resume}</span>
       </div>
     </div>
   );
