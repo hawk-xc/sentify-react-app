@@ -156,6 +156,15 @@ const SentimentDetailPages = ({ detailSentiment, handleBackToSentiments }) => {
               datasetLabel="Positive Graph Keywords"
               colors={{ background: "rgba(102, 187, 106, 0.6)" }}
             />
+            <span>
+              Total Positive Reaction :{" "}
+              {detailSentiment.statistic.data.key_words.graph_positive.reduce(
+                (accumulator, current) => {
+                  return accumulator + current.value;
+                },
+                0
+              )}
+            </span>
           </div>
           <div>
             <h1 className="text-xl">Negative Keywords</h1>
@@ -165,6 +174,15 @@ const SentimentDetailPages = ({ detailSentiment, handleBackToSentiments }) => {
               }
               datasetLabel="Negative Graph Keywords"
             />
+            <span>
+              Total Negative Reaction :{" "}
+              {detailSentiment.statistic.data.key_words.graph_negative.reduce(
+                (accumulator, current) => {
+                  return accumulator + current.value;
+                },
+                0
+              )}
+            </span>
           </div>
         </div>
       </div>
@@ -271,8 +289,41 @@ const SentimentDetailPages = ({ detailSentiment, handleBackToSentiments }) => {
         </div>
       </div>
       <div className="flex flex-col gap-2 p-5 mt-3 border rounded-lg shadow-sm border-slate-200">
-        <h1 className="text-xl">Question</h1>
-        <span className="">{detailSentiment.statistic.data.resume}</span>
+        <h1 className="text-xl">Questions</h1>
+        <div className="flex flex-row flex-wrap items-center w-full gap-3 p-5 align-middle">
+          {detailSentiment.statistic.data.questions.map((item, index) => (
+            <div
+              key={index}
+              className="flex flex-col p-2 my-1 border rounded-lg shadow-md border-slate-100 md:w-80"
+            >
+              <div className="flex flex-row justify-between">
+                <span className="font-semibold">@{item.username}</span>
+                <span className="text-xs text-slate-500">
+                  {timeAgo(
+                    detailSentiment.comments.filter(
+                      (sentiment) => sentiment.username === item.username
+                    )[0].createdAt
+                  )}
+                </span>
+              </div>
+              <span className="mb-3">{item.text}</span>
+              {detailSentiment.comments.filter(
+                (sentiment) => sentiment.username === item.username
+              )[0].likes > 0 ? (
+                <div className="block mt-3">
+                  👍{" "}
+                  {
+                    detailSentiment.comments.filter(
+                      (sentiment) => sentiment.username === item.username
+                    )[0].likes
+                  }
+                </div>
+              ) : (
+                <div className="block mt-3">👍 0</div>
+              )}
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );
