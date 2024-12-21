@@ -4,7 +4,7 @@ import tiktokImg from "../assets/images/tiktok.png";
 import instagramImg from "../assets/images/instagram.jpeg";
 import youtubeImg from "../assets/images/youtube.png";
 import googlemapsImg from "../assets/images/googlemaps.png";
-import StackedBarChart from "../particles/charts/StackedBarChart";
+import { DeleteSentimentModal } from "../particles/models";
 
 const SentimentDetailPages = ({ detailSentiment, handleBackToSentiments }) => {
   const reaction = {
@@ -61,12 +61,21 @@ const SentimentDetailPages = ({ detailSentiment, handleBackToSentiments }) => {
   console.log(detailSentiment);
   return (
     <div className="p-5 bg-white rounded-lg shadow-lg">
-      <button
-        onClick={handleBackToSentiments}
-        className="mb-3 bg-gray-200 btn hover:bg-gray-300"
-      >
-        <i class="ri-arrow-left-s-line"></i> Back to Sentiments
-      </button>
+      <DeleteSentimentModal sentimentId={detailSentiment.unique_id} />
+      <div className="flex flex-row justify-between w-full">
+        <button
+          onClick={handleBackToSentiments}
+          className="mb-3 bg-gray-200 btn hover:bg-gray-300"
+        >
+          <i class="ri-arrow-left-s-line"></i> Back to Sentiments
+        </button>
+        <button
+          className="mb-3 bg-red-200 btn hover:bg-red-300"
+          onClick={() => document.getElementById("my_modal_2").showModal()}
+        >
+          <i class="ri-delete-bin-line"></i> Delete
+        </button>
+      </div>
       <div className="flex flex-col border rounded-lg shadow-sm border-slate-200">
         <div className="flex flex-col p-5">
           <h1 className="text-2xl">

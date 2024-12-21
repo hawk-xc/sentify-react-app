@@ -5,8 +5,8 @@ import instagramImg from "../assets/images/instagram.jpeg";
 import youtubeImg from "../assets/images/youtube.png";
 import googlemapsImg from "../assets/images/googlemaps.png";
 import SentimentDetailPages from "./SentimentDetailPages";
-import { CreateSentimentModel } from "../particles/models";
-import { CreateTagModel } from "../particles/models";
+import { CreateSentimentModal } from "../particles/models";
+import { CreateTagModal } from "../particles/models";
 
 const SentimentPages = () => {
   const [tags, setTags] = useState([]);
@@ -119,8 +119,8 @@ const SentimentList = ({
 }) => {
   return (
     <div>
-      <CreateSentimentModel tags={tags} />
-      <CreateTagModel />
+      <CreateSentimentModal tags={tags} />
+      <CreateTagModal />
       <div className="grid grid-cols-12 gap-5">
         <div className="flex flex-col col-span-3 p-5 bg-white rounded-lg shadow-lg">
           <h2 className="mb-3 text-3xl font-extrabold">🏷️ My Tags</h2>
