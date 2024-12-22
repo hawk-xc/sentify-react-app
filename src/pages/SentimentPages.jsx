@@ -5,6 +5,7 @@ import instagramImg from "../assets/images/instagram.jpeg";
 import youtubeImg from "../assets/images/youtube.png";
 import googlemapsImg from "../assets/images/googlemaps.png";
 import SentimentDetailPages from "./SentimentDetailPages";
+import DashboardReactionChart from '../particles/charts/DashboardReactionChart';
 import { CreateSentimentModal } from "../particles/models";
 import { CreateTagModal } from "../particles/models";
 
@@ -14,6 +15,7 @@ const SentimentPages = () => {
   const [activeTag, setActiveTag] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [detailLoading, setDetailLoading] = useState(false);
+  const [dashboardData, setDashboardData] = useState([]);
   const [detailSentiment, setDetailSentiment] = useState(null);
 
   const fetchTags = async () => {
@@ -39,6 +41,19 @@ const SentimentPages = () => {
     }
   };
 
+  const fetchDashboardData = async () => {
+    try {
+      const response = await axiosClient.get("/dashboard");
+      setDashboardData({
+        sentiment_count: response.data.data.sentimentCount,
+        total_comments: response.data.data.totalCommentsLimit,
+        total_reactions: response.data.data.totalSentimentStatistics,
+      });
+    } catch (error) {
+      console.error("Failed to fetch dashboard data:", error);
+    }
+  };
+
   const fetchSentimentDetail = async (sentimentId) => {
     try {
       const response = await axiosClient.get(`/sentiment/${sentimentId}/all`);
@@ -53,6 +68,7 @@ const SentimentPages = () => {
   useEffect(() => {
     fetchTags();
     fetchSentiment();
+    fetchDashboardData();
   }, []);
 
   const handleSentimentClick = (sentimentId) => {
@@ -95,6 +111,7 @@ const SentimentPages = () => {
         <SentimentList
           tags={tags}
           sentiment={sentiment}
+          dashboardData={dashboardData}
           handleSentimentClick={handleSentimentClick}
           handleTagClick={handleTagClick}
           activeTag={activeTag}
@@ -110,6 +127,7 @@ const SentimentPages = () => {
 const SentimentList = ({
   tags,
   sentiment,
+  dashboardData,
   handleSentimentClick,
   handleTagClick,
   activeTag,
@@ -134,9 +152,8 @@ const SentimentList = ({
             <div className="flex flex-row flex-wrap">
               <button
                 onClick={() => handleTagClick(null)}
-                className={`flex flex-row gap-1 m-1 p-2 rounded-box ${
-                  activeTag === null ? "bg-blue-500 text-white" : "bg-base-200"
-                }`}
+                className={`flex flex-row gap-1 m-1 p-2 rounded-box ${activeTag === null ? "bg-blue-500 text-white" : "bg-base-200"
+                  }`}
               >
                 🏷️ All
               </button>
@@ -146,11 +163,10 @@ const SentimentList = ({
                   onClick={() =>
                     detailLoading ? null : handleTagClick(tag.unique_id)
                   }
-                  className={`flex flex-row gap-1 m-1 px-3 py-2 rounded-box ${
-                    activeTag === tag.unique_id
-                      ? "bg-blue-500 text-white"
-                      : "bg-base-200"
-                  }`}
+                  className={`flex flex-row gap-1 m-1 px-3 py-2 rounded-box ${activeTag === tag.unique_id
+                    ? "bg-blue-500 text-white"
+                    : "bg-base-200"
+                    }`}
                 >
                   🏷️ {tag.tag_name}
                 </button>
@@ -231,8 +247,23 @@ const SentimentList = ({
           )}
         </div>
 
-        <div className="col-span-3 p-5 bg-white rounded-lg shadow-lg">
+        <div className="col-span-3 p-5 bg-white rounded-lg shadow-lg flex flex-col gap-3">
           <h2 className="mb-3 text-3xl font-extrabold">🔎 Statistic</h2>
+          <div className="p-4 bg-orange-50 rounded-lg">
+            <span className="text-sm">All Sentiment</span>
+            <h3 className="font-bold text-4xl opacity-80">{dashboardData.sentiment_count || 0}</h3>
+          </div>
+          <div className="p-4 bg-orange-50 rounded-lg">
+            <span className="text-sm">All Comments</span>
+            <h3 className="font-bold text-4xl opacity-80">{dashboardData.total_comments || 0}</h3>
+          </div>
+          <div className="w-full flex justify-center flex-col align-middle items-center bg-orange-50 rounded-lg p-3">
+            <div className="w-full flex items-start mb-3">
+              <span className="text-sm">All Reactions</span>
+            </div>
+            {console.log(dashboardData.total_reactions)}
+            <DashboardReactionChart data={dashboardData.total_reactions || { positive: 0, negative: 0, neutral: 0 }} />
+          </div>
         </div>
       </div>
     </div>

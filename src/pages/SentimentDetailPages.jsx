@@ -215,7 +215,7 @@ const SentimentDetailPages = ({ detailSentiment, handleBackToSentiments }) => {
                     (item, index) => (
                       <div
                         key={index}
-                        className="flex flex-col p-2 my-1 border rounded-lg shadow-md border-slate-100"
+                        className="flex flex-col p-2 my-1 border rounded-lg shadow-md border-slate-100 active:scale-95 duration-150 transition-all hover:cursor-pointer"
                       >
                         <div className="flex flex-row justify-between">
                           <span className="font-semibold">
@@ -258,7 +258,7 @@ const SentimentDetailPages = ({ detailSentiment, handleBackToSentiments }) => {
                     (item, index) => (
                       <div
                         key={index}
-                        className="flex flex-col p-2 my-1 border rounded-lg shadow-md border-slate-100"
+                        className="flex flex-col p-2 my-1 border rounded-lg shadow-md border-slate-100 active:scale-95 duration-150 transition-all hover:cursor-pointer"
                       >
                         <div className="flex flex-row justify-between">
                           <span className="font-semibold">
@@ -297,13 +297,13 @@ const SentimentDetailPages = ({ detailSentiment, handleBackToSentiments }) => {
           </div>
         </div>
       </div>
-      <div className="flex flex-col gap-2 p-5 mt-3 border rounded-lg shadow-sm border-slate-200">
+      {detailSentiment.statistic.data.questions.length > 0 ? (<div className="flex flex-col gap-2 p-5 mt-3 border rounded-lg shadow-sm border-slate-200">
         <h1 className="text-xl">Questions</h1>
         <div className="flex flex-row flex-wrap items-center w-full gap-3 p-5 align-middle">
           {detailSentiment.statistic.data.questions.map((item, index) => (
             <div
               key={index}
-              className="flex flex-col p-2 my-1 border rounded-lg shadow-md border-slate-100 md:w-80"
+              className="flex flex-col p-2 my-1 border rounded-lg shadow-md border-slate-100 md:w-80 active:scale-95 duration-150 transition-all hover:cursor-pointer"
             >
               <div className="flex flex-row justify-between">
                 <span className="font-semibold">@{item.username}</span>
@@ -334,6 +334,7 @@ const SentimentDetailPages = ({ detailSentiment, handleBackToSentiments }) => {
           ))}
         </div>
       </div>
+      ) : ""}
     </div>
   );
 };

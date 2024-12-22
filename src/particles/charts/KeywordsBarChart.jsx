@@ -62,7 +62,7 @@ const BarChart = ({ graphData, datasetLabel, colors }) => {
   }, [graphData, datasetLabel, colors]);
 
   return (
-    <div style={{ width: "500px", height: "400px" }}>
+    <div style={{ width: "400px", height: "300px" }}>
       <canvas ref={chartContainer}></canvas>
     </div>
   );
