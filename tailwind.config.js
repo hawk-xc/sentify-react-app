@@ -9,6 +9,7 @@ export default {
     extend: {
       fontFamily: {
         sans: ["SF Pro", "sans-serif"],
+        figtree: ['Figtree', 'Noto Sans', 'sans-serif'],
       },
     },
   },

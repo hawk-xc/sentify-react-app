@@ -99,7 +99,7 @@ export default function Login() {
           <div className="divider">OR</div>
           <div className="text-center">
             <p>Don't have an account?</p>
-            <a href="#" className="link link-primary">
+            <a href="/register" className="link link-primary">
               Sign up now
             </a>
           </div>

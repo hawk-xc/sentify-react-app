@@ -2,6 +2,7 @@ import { RouterProvider, createBrowserRouter, Navigate } from "react-router-dom"
 import { useAuth } from "./context/AuthProvider.jsx";
 import { PrivateRoute } from "./components/PrivateRoute.jsx";
 import LoginPage from "./pages/loginPages";
+import RegisterPage from "./pages/registerPages.jsx";
 import NotFoundPages from "./pages/NotFoundPages.jsx";
 import DashboardPages from "./pages/dashboardPages.jsx";
 
@@ -42,6 +43,10 @@ function Routes() {
       path: "/login",
       element: <LoginPage />,
     },
+    {
+      path: "/register",
+      element: <RegisterPage />
+    }
   ];
 
   const fallbackRoute = [

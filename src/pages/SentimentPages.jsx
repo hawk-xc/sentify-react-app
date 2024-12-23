@@ -255,9 +255,8 @@ const SentimentList = ({
               </div>
             ))
           ) : (
-            <div className="flex flex-col items-center justify-center w-full h-full align-middle">
-              <span className="loading loading-ring loading-lg"></span>
-              No sentiments found...
+            <div className="flex flex-col items-center justify-center w-full h-full align-middle px-10">
+              <h1 className="text-7xl font-extrabold">We don't have any sentiment right now <img loading="lazy" alt="yawing face emoji" src="https://img.daisyui.com/images/emoji/yawning-face@80.webp" className="pointer-events-none inline-block h-[5rem] w-[5rem] align-bottom" /></h1>
             </div>
           )}
         </div>
