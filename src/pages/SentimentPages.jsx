@@ -9,6 +9,7 @@ import DashboardReactionChart from '../particles/charts/DashboardReactionChart';
 import { CreateSentimentModal, DeleteTagModal } from "../particles/models";
 import { CreateTagModal } from "../particles/models";
 import { DeleteSentimentModal } from "../particles/models";
+import EmptyDataPart from '../particles/EmptyDataPart';
 
 const SentimentPages = () => {
   const [tags, setTags] = useState([]);
@@ -123,6 +124,7 @@ const SentimentPages = () => {
           tagId={tagId}
           setTagId={setTagId}
           getImage={getImage}
+          EmptyDataPart={EmptyDataPart}
         />
       )}
     </div>
@@ -142,12 +144,13 @@ const SentimentList = ({
   tagId,
   setTagId,
   getImage,
+  EmptyDataPart
 }) => {
   return (
     <div>
       <CreateSentimentModal tags={tags} />
       <CreateTagModal />
-      <DeleteTagModal fetchTags={fetchTags} tagId={tagId}/>
+      <DeleteTagModal fetchTags={fetchTags} tagId={tagId} />
       <div className="grid grid-cols-12 gap-5">
         <div className="flex flex-col col-span-3 p-5 bg-white rounded-lg shadow-lg">
           <h2 className="mb-3 text-3xl font-extrabold">🏷️ My Tags</h2>
@@ -255,9 +258,7 @@ const SentimentList = ({
               </div>
             ))
           ) : (
-            <div className="flex flex-col items-center justify-center w-full h-full align-middle px-10">
-              <h1 className="text-7xl font-extrabold">We don't have any sentiment right now <img loading="lazy" alt="yawing face emoji" src="https://img.daisyui.com/images/emoji/yawning-face@80.webp" className="pointer-events-none inline-block h-[5rem] w-[5rem] align-bottom" /></h1>
-            </div>
+            <EmptyDataPart />
           )}
         </div>
 
