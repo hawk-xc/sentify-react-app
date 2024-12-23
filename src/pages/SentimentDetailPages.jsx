@@ -58,7 +58,6 @@ const SentimentDetailPages = ({ detailSentiment, handleBackToSentiments }) => {
     }
   };
 
-  console.log(detailSentiment);
   return (
     <div className="p-5 bg-white rounded-lg shadow-lg">
       <DeleteSentimentModal sentimentId={detailSentiment.unique_id} />
@@ -67,13 +66,13 @@ const SentimentDetailPages = ({ detailSentiment, handleBackToSentiments }) => {
           onClick={handleBackToSentiments}
           className="mb-3 bg-gray-200 btn hover:bg-gray-300"
         >
-          <i class="ri-arrow-left-s-line"></i> Back to Sentiments
+          <i className="ri-arrow-left-s-line"></i> Back to Sentiments
         </button>
         <button
           className="mb-3 bg-red-200 btn hover:bg-red-300"
           onClick={() => document.getElementById("my_modal_2").showModal()}
         >
-          <i class="ri-delete-bin-line"></i> Delete
+          <i className="ri-delete-bin-line"></i> Delete
         </button>
       </div>
       <div className="flex flex-col border rounded-lg shadow-sm border-slate-200">
@@ -89,7 +88,7 @@ const SentimentDetailPages = ({ detailSentiment, handleBackToSentiments }) => {
                 key={index}
                 className="text-blue-300 hover:text-blue-500"
               >
-                <i class="ri-links-line"></i> {detailSentiment.platform} link{" "}
+                <i className="ri-links-line"></i> {detailSentiment.platform} link{" "}
                 {index + 1}
               </a>
             ))}
@@ -100,7 +99,7 @@ const SentimentDetailPages = ({ detailSentiment, handleBackToSentiments }) => {
           <div className="flex flex-row justify-between w-full">
             <div className="flex flex-col gap-2">
               <span className="font-semibold text-blue-400">
-                Status <i class="ri-arrow-down-s-line"></i>
+                Status <i className="ri-arrow-down-s-line"></i>
               </span>
               <span className="flex flex-row items-center justify-center gap-2 p-4 align-middle badge border-slate-200">
                 <span className="badge badge-xs badge-success"></span>
@@ -109,7 +108,7 @@ const SentimentDetailPages = ({ detailSentiment, handleBackToSentiments }) => {
             </div>
             <div className="flex flex-col gap-2">
               <span className="font-semibold text-blue-400">
-                Platform <i class="ri-arrow-down-s-line"></i>
+                Platform <i className="ri-arrow-down-s-line"></i>
               </span>
               <span className="flex flex-row items-center justify-center gap-2 p-4 align-middle badge border-slate-200">
                 <img
@@ -122,7 +121,7 @@ const SentimentDetailPages = ({ detailSentiment, handleBackToSentiments }) => {
             </div>
             <div className="flex flex-col gap-2">
               <span className="font-semibold text-blue-400">
-                Reaction Avg <i class="ri-arrow-down-s-line"></i>
+                Reaction Avg <i className="ri-arrow-down-s-line"></i>
               </span>
               <span className="flex flex-row items-center justify-center gap-2 p-4 align-middle badge border-slate-200">
                 {reactionOverall === "positive" && "😊 "}

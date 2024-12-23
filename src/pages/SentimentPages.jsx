@@ -6,14 +6,16 @@ import youtubeImg from "../assets/images/youtube.png";
 import googlemapsImg from "../assets/images/googlemaps.png";
 import SentimentDetailPages from "./SentimentDetailPages";
 import DashboardReactionChart from '../particles/charts/DashboardReactionChart';
-import { CreateSentimentModal } from "../particles/models";
+import { CreateSentimentModal, DeleteTagModal } from "../particles/models";
 import { CreateTagModal } from "../particles/models";
+import { DeleteSentimentModal } from "../particles/models";
 
 const SentimentPages = () => {
   const [tags, setTags] = useState([]);
   const [sentiment, setSentiment] = useState([]);
   const [activeTag, setActiveTag] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [tagId, setTagId] = useState(null);
   const [detailLoading, setDetailLoading] = useState(false);
   const [dashboardData, setDashboardData] = useState([]);
   const [detailSentiment, setDetailSentiment] = useState(null);
@@ -117,6 +119,9 @@ const SentimentPages = () => {
           activeTag={activeTag}
           isLoading={isLoading}
           detailLoading={detailLoading}
+          fetchTags={fetchTags}
+          tagId={tagId}
+          setTagId={setTagId}
           getImage={getImage}
         />
       )}
@@ -133,12 +138,16 @@ const SentimentList = ({
   activeTag,
   isLoading,
   detailLoading,
+  fetchTags,
+  tagId,
+  setTagId,
   getImage,
 }) => {
   return (
     <div>
       <CreateSentimentModal tags={tags} />
       <CreateTagModal />
+      <DeleteTagModal fetchTags={fetchTags} tagId={tagId}/>
       <div className="grid grid-cols-12 gap-5">
         <div className="flex flex-col col-span-3 p-5 bg-white rounded-lg shadow-lg">
           <h2 className="mb-3 text-3xl font-extrabold">🏷️ My Tags</h2>
@@ -158,7 +167,7 @@ const SentimentList = ({
                 🏷️ All
               </button>
               {tags.map((tag, index) => (
-                <button
+                <div
                   key={index}
                   onClick={() =>
                     detailLoading ? null : handleTagClick(tag.unique_id)
@@ -169,7 +178,13 @@ const SentimentList = ({
                     }`}
                 >
                   🏷️ {tag.tag_name}
-                </button>
+                  <button className={`rounded-full flex justify-center align-middle items-center opacity-55 hover:opacity-100 z-50 active:scale-105 duration-150 ${activeTag === tag.unique_id ? "" : "hidden"} ml-2`} onClick={() => {
+                    setTagId(tag.unique_id)
+                    document.getElementById("my_modal_3").showModal()
+                  }}>
+                    <i className="ri-delete-bin-5-line"></i>
+                  </button>
+                </div>
               ))}
             </div>
           ) : (
@@ -261,7 +276,6 @@ const SentimentList = ({
             <div className="w-full flex items-start mb-3">
               <span className="text-sm">All Reactions</span>
             </div>
-            {console.log(dashboardData.total_reactions)}
             <DashboardReactionChart data={dashboardData.total_reactions || { positive: 0, negative: 0, neutral: 0 }} />
           </div>
         </div>
