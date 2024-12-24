@@ -1,4 +1,4 @@
-export default function EmptyDataPart() {
+export default function EmptyDataPart({ clearTagClick }) {
     return (
         <div className="w-full flex items-center flex-wrap flex-col justify-center align-middle gap-10 h-full">
             <div className="grid gap-4 w-60">
@@ -23,8 +23,8 @@ export default function EmptyDataPart() {
                     <h2 className="text-center text-black text-xl font-semibold leading-loose pb-2">There’s no sentiment data here</h2>
                     <p className="text-center text-black text-base font-normal leading-relaxed pb-4">Try add data or changing your tags to see appointments </p>
                     <div className="flex gap-3">
-                        <button className="w-full px-3 py-2 rounded-full border border-gray-300 text-gray-900 text-xs font-semibold leading-4"> All Tags </button>
-                        <button className="w-full px-3 py-2 bg-indigo-600 hover:bg-indigo-700 transition-all duration-500 rounded-full text-white text-xs font-semibold leading-4"> Add Sentiment </button>
+                        <button className="w-full px-3 py-2 rounded-full border border-gray-300 text-gray-900 text-xs font-semibold leading-4" onClick={clearTagClick}> All Tags </button>
+                        <button className="w-full px-3 py-2 bg-indigo-600 hover:bg-indigo-700 transition-all duration-500 rounded-full text-white text-xs font-semibold leading-4" onClick={() => document.getElementById("my_modal_1").showModal()}> Add Sentiment </button>
                     </div>
                 </div>
             </div>

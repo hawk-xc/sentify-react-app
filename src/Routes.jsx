@@ -6,6 +6,11 @@ import RegisterPage from "./pages/registerPages.jsx";
 import NotFoundPages from "./pages/NotFoundPages.jsx";
 import DashboardPages from "./pages/dashboardPages.jsx";
 
+// Buat komponen fallback untuk Hydration
+function HydrateFallback() {
+  return <div>Loading...</div>;
+}
+
 function Routes() {
   const { token } = useAuth();
   const isAuthenticated = Boolean(token);
@@ -45,8 +50,8 @@ function Routes() {
     },
     {
       path: "/register",
-      element: <RegisterPage />
-    }
+      element: <RegisterPage />,
+    },
   ];
 
   const fallbackRoute = [
@@ -56,17 +61,31 @@ function Routes() {
     },
   ];
 
-  const router = createBrowserRouter([
-    ...routesForPublic,
-    ...(isAuthenticated ? routesForAuthenticatedOnly : routesForNotAuthenticatedOnly),
-    ...fallbackRoute,
-  ]);
+  const router = createBrowserRouter(
+    [
+      ...routesForPublic,
+      ...(isAuthenticated ? routesForAuthenticatedOnly : routesForNotAuthenticatedOnly),
+      ...fallbackRoute,
+    ],
+    {
+      future: {
+        v7_startTransition: true,
+        v7_relativeSplatPath: true,
+        v7_fetcherPersist: true,
+        v7_normalizeFormMethod: true,
+        v7_partialHydration: true,
+        v7_skipActionErrorRevalidation: true,
+      },
+    }
+  );
 
   return (
     <RouterProvider
       router={router}
-      fallbackElement={<div>Something went wrong. Please try again later.</div>}
-    />
+      fallbackElement={null}
+    >
+      <HydrateFallback />
+    </RouterProvider>
   );
 }
 

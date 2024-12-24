@@ -26,7 +26,7 @@ const SentimentPages = () => {
       const response = await axiosClient.get("/tags");
       setTags(response.data.data);
     } catch (error) {
-      console.error("Failed to fetch tags:", error);
+      // console.error("Failed to fetch tags:", error);
     }
   };
 
@@ -38,7 +38,8 @@ const SentimentPages = () => {
       );
       setSentiment(response.data.data);
     } catch (error) {
-      console.error("Failed to fetch sentiment:", error);
+      setSentiment([]);
+      // console.error("Failed to fetch sentiment:", error);
     } finally {
       setIsLoading(false);
     }
@@ -88,6 +89,11 @@ const SentimentPages = () => {
     fetchSentiment(uniqueId);
   };
 
+  const clearTagClick = () => {
+    setActiveTag(null);
+    fetchSentiment();
+  }
+
   const getImage = (platform) => {
     switch (platform) {
       case "instagram":
@@ -117,6 +123,7 @@ const SentimentPages = () => {
           dashboardData={dashboardData}
           handleSentimentClick={handleSentimentClick}
           handleTagClick={handleTagClick}
+          clearTagClick={clearTagClick}
           activeTag={activeTag}
           isLoading={isLoading}
           detailLoading={detailLoading}
@@ -137,6 +144,7 @@ const SentimentList = ({
   dashboardData,
   handleSentimentClick,
   handleTagClick,
+  clearTagClick,
   activeTag,
   isLoading,
   detailLoading,
@@ -153,7 +161,7 @@ const SentimentList = ({
       <DeleteTagModal fetchTags={fetchTags} tagId={tagId} />
       <div className="grid grid-cols-12 gap-5">
         <div className="flex flex-col col-span-3 p-5 bg-white rounded-lg shadow-lg">
-          <h2 className="mb-3 text-3xl font-extrabold">🏷️ My Tags</h2>
+          <h2 className="mb-3 text-3xl font-extrabold opacity-85">🏷️ My Tags</h2>
           <button
             className="mb-3 shadow-md btn bg-sky-100 hover:bg-sky-200"
             onClick={() => document.getElementById("my_modal_2").showModal()}
@@ -200,13 +208,14 @@ const SentimentList = ({
 
         <div className="flex flex-col col-span-6 p-5 bg-white rounded-lg shadow-lg">
           <div className="flex flex-row items-center justify-between">
-            <h2 className="mb-3 text-3xl font-extrabold">😃 My Sentiment</h2>
-            <button
+            <h2 className="mb-3 text-3xl font-extrabold opacity-85">😃 My Sentiment</h2>
+            {sentiment.length > 0 && (<button
               className="mb-3 shadow-md btn bg-sky-100 hover:bg-sky-200"
               onClick={() => document.getElementById("my_modal_1").showModal()}
             >
               Add Sentiment ➕
             </button>
+            )}
           </div>
           {detailLoading ? (
             <div className="flex flex-col items-center justify-center w-full h-full align-middle transition-all duration-150">
@@ -258,12 +267,12 @@ const SentimentList = ({
               </div>
             ))
           ) : (
-            <EmptyDataPart />
+            <EmptyDataPart clearTagClick={clearTagClick} />
           )}
         </div>
 
         <div className="col-span-3 p-5 bg-white rounded-lg shadow-lg flex flex-col gap-3">
-          <h2 className="mb-3 text-3xl font-extrabold">🔎 Statistic</h2>
+          <h2 className="mb-3 text-3xl font-extrabold opacity-85">🔎 Statistic</h2>
           <div className="p-4 bg-orange-50 rounded-lg">
             <span className="text-sm">All Sentiment</span>
             <h3 className="font-bold text-4xl opacity-80">{dashboardData.sentiment_count || 0}</h3>

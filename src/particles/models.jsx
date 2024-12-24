@@ -228,9 +228,7 @@ export const CreateTagModal = (props) => {
             <button className="btn bg-sky-200" type="submit">
               Add Tag
             </button>
-            <form method="dialog">
-              <button className="btn">Close</button>
-            </form>
+            <button className="btn" onClick={() => document.getElementById("my_modal_2").close()}>Close</button>
           </div>
         </form>
       </div>
