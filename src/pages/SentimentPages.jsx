@@ -5,7 +5,8 @@ import instagramImg from "../assets/images/instagram.jpeg";
 import youtubeImg from "../assets/images/youtube.png";
 import googlemapsImg from "../assets/images/googlemaps.png";
 import SentimentDetailPages from "./SentimentDetailPages";
-import SentimentSkeletonLoader from '../particles/SentimentSkeletonLoader';
+import SentimentSkeletonLoader from '../particles/loading/SentimentSkeletonLoader';
+import LoadingBasic from "../particles/loading/loadingBasic";
 import DashboardReactionChart from '../particles/charts/DashboardReactionChart';
 import { CreateSentimentModal, DeleteTagModal } from "../particles/models";
 import { CreateTagModal } from "../particles/models";
@@ -127,10 +128,12 @@ const SentimentPages = () => {
           activeTag={activeTag}
           isLoading={isLoading}
           detailLoading={detailLoading}
+          LoadingBasic={LoadingBasic}
           fetchSentiment={fetchSentiment}
           fetchTags={fetchTags}
           tagId={tagId}
           setTagId={setTagId}
+          setActiveTag={setActiveTag}
           getImage={getImage}
           SentimentSkeletonLoader={SentimentSkeletonLoader}
           EmptyDataPart={EmptyDataPart}
@@ -150,10 +153,12 @@ const SentimentList = ({
   activeTag,
   isLoading,
   detailLoading,
+  LoadingBasic,
   fetchSentiment,
   fetchTags,
   tagId,
   setTagId,
+  setActiveTag,
   getImage,
   SentimentSkeletonLoader,
   EmptyDataPart
@@ -161,8 +166,8 @@ const SentimentList = ({
   return (
     <div>
       <CreateSentimentModal tags={tags} />
-      <CreateTagModal />
-      <DeleteTagModal fetchTags={fetchTags} tagId={tagId} fetchSentiment={fetchSentiment}/>
+      <CreateTagModal fetchTags={fetchTags}/>
+      <DeleteTagModal fetchTags={fetchTags} tagId={tagId} fetchSentiment={fetchSentiment} setActiveTag={setActiveTag} />
       <div className="grid grid-cols-12 gap-5">
         <div className="flex flex-col col-span-3 p-5 bg-white rounded-lg shadow-lg">
           <h2 className="mb-3 text-3xl font-extrabold opacity-85">🏷️ My Tags</h2>
@@ -223,10 +228,7 @@ const SentimentList = ({
             )}
           </div>
           {detailLoading ? (
-            <div className="flex flex-col items-center justify-center w-full h-full align-middle transition-all duration-150">
-              <span className="loading loading-ring loading-lg"></span>
-              Loading details...
-            </div>
+            <LoadingBasic />
           ) : isLoading ? (
             <SentimentSkeletonLoader />
           ) : sentiment.length > 0 ? (

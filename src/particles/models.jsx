@@ -4,16 +4,56 @@ import instagramImg from "../assets/images/instagram.jpeg";
 import youtubeImg from "../assets/images/youtube.png";
 import googlemapsImg from "../assets/images/googlemaps.png";
 import axiosClient from "../api/axiosClient";
+import LoadingOverlay from '../particles/loading/loadingOverlay';
 
 export const CreateSentimentModal = (props) => {
   const [selectedSocialMedia, setSelectedSocialMedia] = useState("");
+  const [sentimentTitle, setSentimentTitle] = useState("");
+  const [sentimentLink, setSentimentLink] = useState("");
+  const [resultLimit, setResultLimit] = useState(5);
+  const [tags, setTags] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleSocialMediaChange = (event) => {
     setSelectedSocialMedia(event.target.value);
   };
 
+  const handleSubmitForm = async (e) => {
+    e.preventDefault();
+
+    setIsLoading(true);
+    try {
+      const response_data = {
+        link: sentimentLink,
+        platformName: selectedSocialMedia,
+        title: sentimentTitle,
+        tags: tags,
+        resultLimit: parseInt(resultLimit, 10)
+      }
+
+      console.log(response_data);
+      const response = await axiosClient.post("/sentiment", response_data);
+
+      if (response.status === 200) {
+        console.log('success');
+        setSentimentLink('');
+        setSentimentTitle('');
+        setSelectedSocialMedia('');
+        setResultLimit(5);
+        setTags([]);
+        document.getElementById("my_modal_1").close();
+      }
+
+      setIsLoading(false);
+    } catch (error) {
+      console.log(error);
+      setIsLoading(false);
+    }
+  }
+
   return (
     <dialog id="my_modal_1" className="modal">
+      {isLoading && <LoadingOverlay />}
       <div className="modal-box">
         <h3 className="text-lg font-bold">Let's Create Sentiment!🩷</h3>
         <div role="alert" className="my-3 shadow-lg alert">
@@ -36,7 +76,7 @@ export const CreateSentimentModal = (props) => {
             </p>
           </div>
         </div>
-        <form className="flex flex-col gap-3 px-2 my-5">
+        <form className="flex flex-col gap-3 px-2 my-5" onSubmit={(e) => handleSubmitForm(e)}>
           <div className="flex flex-row gap-4">
             {/* TikTok Option */}
             <label
@@ -123,14 +163,14 @@ export const CreateSentimentModal = (props) => {
             Sentiment Title
             <label className="flex items-center gap-2 input input-bordered">
               〰️
-              <input type="text" className="grow" placeholder="Title" />
+              <input type="text" className="grow" placeholder="Title" onChange={(e) => setSentimentTitle(e.target.value)} value={sentimentTitle} />
             </label>
           </div>
           <div className="flex flex-col gap-1">
             Sentiment Link
             <label className="flex items-center gap-2 input input-bordered">
               🔗
-              <input type="text" className="grow" placeholder="Link" required />
+              <input type="text" className="grow" placeholder="Link" required onChange={(e) => setSentimentLink(e.target.value)} value={sentimentLink} />
             </label>
           </div>
           <div className="flex flex-col gap-1">
@@ -141,7 +181,8 @@ export const CreateSentimentModal = (props) => {
                 type="number"
                 className="grow"
                 placeholder="Total Comments"
-                defaultValue={5}
+                onChange={(e) => setResultLimit(e.target.value)}
+                value={resultLimit}
               />
             </label>
           </div>
@@ -154,7 +195,7 @@ export const CreateSentimentModal = (props) => {
                     className="flex items-center text-sm font-medium transition-colors rounded-full cursor-pointer"
                     key={index}
                   >
-                    <input type="checkbox" className="hidden peer" />
+                    <input type="checkbox" className="hidden peer" onChange={(e) => (e.target.checked ? setTags([...tags, item.tag_name]) : setTags(tags.filter((tag) => tag !== item.tag_name)))} />
                     <span className="px-3 py-1 border rounded-full peer-checked:bg-sky-200 peer-checked:text-black bg-slate-200 hover:bg-slate-300 peer-checked:border-slate-500">
                       🏷️{item.tag_name}
                     </span>
@@ -163,13 +204,13 @@ export const CreateSentimentModal = (props) => {
               })}
             </div>
           </div>
+          <div className="modal-action">
+            <button className="btn bg-sky-200" type="submit">
+              Add Sentiment
+            </button>
+            <button className="btn" onClick={() => document.getElementById("my_modal_1").close()}>Close</button>
+          </div>
         </form>
-        <div className="modal-action">
-          <form method="dialog">
-            {/* if there is a button in form, it will close the modal */}
-            <button className="btn">Close</button>
-          </form>
-        </div>
       </div>
     </dialog>
   );
@@ -186,7 +227,9 @@ export const CreateTagModal = (props) => {
       });
 
       if (response.status === 200) {
-        window.location.reload();
+        setTagname('');
+        props.fetchTags();
+        document.getElementById("my_modal_2").close();
       }
     } catch (error) {
       console.error(`error : ${error}`);
@@ -221,7 +264,7 @@ export const CreateTagModal = (props) => {
             Tag Name
             <label className="flex items-center gap-2 input input-bordered">
               🏷️
-              <input type="text" className="grow" placeholder="e.g Technology" onChange={(e) => setTagname(e.target.value)} />
+              <input type="text" className="grow" placeholder="e.g Technology" onChange={(e) => setTagname(e.target.value)} value={tagname} />
             </label>
           </div>
           <div className="modal-action">
@@ -297,6 +340,7 @@ export const DeleteTagModal = (props) => {
 
       if (response.status === 200) {
         props.fetchTags();
+        props.setActiveTag(null);
         props.fetchSentiment();
       }
     } catch (error) {

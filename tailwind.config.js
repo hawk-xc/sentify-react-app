@@ -11,6 +11,15 @@ export default {
         sans: ["SF Pro", "sans-serif"],
         figtree: ['Figtree', 'Noto Sans', 'sans-serif'],
       },
+      animation: {
+        loading: "loading 1.5s ease-in-out infinite",
+      },
+      keyframes: {
+        loading: {
+          "0%": { transform: "translateX(-100%)" },
+          "100%": { transform: "translateX(100%)" },
+        },
+      },
     },
   },
   plugins: [daisyui],
