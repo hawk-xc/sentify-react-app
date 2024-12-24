@@ -5,10 +5,10 @@ import instagramImg from "../assets/images/instagram.jpeg";
 import youtubeImg from "../assets/images/youtube.png";
 import googlemapsImg from "../assets/images/googlemaps.png";
 import SentimentDetailPages from "./SentimentDetailPages";
+import SentimentSkeletonLoader from '../particles/SentimentSkeletonLoader';
 import DashboardReactionChart from '../particles/charts/DashboardReactionChart';
 import { CreateSentimentModal, DeleteTagModal } from "../particles/models";
 import { CreateTagModal } from "../particles/models";
-import { DeleteSentimentModal } from "../particles/models";
 import EmptyDataPart from '../particles/EmptyDataPart';
 
 const SentimentPages = () => {
@@ -127,10 +127,12 @@ const SentimentPages = () => {
           activeTag={activeTag}
           isLoading={isLoading}
           detailLoading={detailLoading}
+          fetchSentiment={fetchSentiment}
           fetchTags={fetchTags}
           tagId={tagId}
           setTagId={setTagId}
           getImage={getImage}
+          SentimentSkeletonLoader={SentimentSkeletonLoader}
           EmptyDataPart={EmptyDataPart}
         />
       )}
@@ -148,17 +150,19 @@ const SentimentList = ({
   activeTag,
   isLoading,
   detailLoading,
+  fetchSentiment,
   fetchTags,
   tagId,
   setTagId,
   getImage,
+  SentimentSkeletonLoader,
   EmptyDataPart
 }) => {
   return (
     <div>
       <CreateSentimentModal tags={tags} />
       <CreateTagModal />
-      <DeleteTagModal fetchTags={fetchTags} tagId={tagId} />
+      <DeleteTagModal fetchTags={fetchTags} tagId={tagId} fetchSentiment={fetchSentiment}/>
       <div className="grid grid-cols-12 gap-5">
         <div className="flex flex-col col-span-3 p-5 bg-white rounded-lg shadow-lg">
           <h2 className="mb-3 text-3xl font-extrabold opacity-85">🏷️ My Tags</h2>
@@ -172,7 +176,7 @@ const SentimentList = ({
             <div className="flex flex-row flex-wrap">
               <button
                 onClick={() => handleTagClick(null)}
-                className={`flex flex-row gap-1 m-1 p-2 rounded-box ${activeTag === null ? "bg-blue-500 text-white" : "bg-base-200"
+                className={`hover:cursor-pointer active:scale-95 duration-150 flex flex-row gap-1 m-1 p-2 rounded-box ${activeTag === null ? "bg-blue-500 text-white" : "bg-base-200"
                   }`}
               >
                 🏷️ All
@@ -183,7 +187,7 @@ const SentimentList = ({
                   onClick={() =>
                     detailLoading ? null : handleTagClick(tag.unique_id)
                   }
-                  className={`flex flex-row gap-1 m-1 px-3 py-2 rounded-box ${activeTag === tag.unique_id
+                  className={`hover:cursor-pointer active:scale-95 duration-150 flex flex-row gap-1 m-1 px-3 py-2 rounded-box ${activeTag === tag.unique_id
                     ? "bg-blue-500 text-white"
                     : "bg-base-200"
                     }`}
@@ -194,6 +198,7 @@ const SentimentList = ({
                     document.getElementById("my_modal_3").showModal()
                   }}>
                     <i className="ri-delete-bin-5-line"></i>
+                    delete
                   </button>
                 </div>
               ))}
@@ -223,10 +228,7 @@ const SentimentList = ({
               Loading details...
             </div>
           ) : isLoading ? (
-            <div className="flex flex-col items-center justify-center w-full h-full align-middle">
-              <span className="loading loading-ring loading-lg"></span>
-              Loading sentiments...
-            </div>
+            <SentimentSkeletonLoader />
           ) : sentiment.length > 0 ? (
             sentiment.map((item, index) => (
               <div

@@ -297,6 +297,7 @@ export const DeleteTagModal = (props) => {
 
       if (response.status === 200) {
         props.fetchTags();
+        props.fetchSentiment();
       }
     } catch (error) {
       console.error("Failed to delete sentiment:", error);
