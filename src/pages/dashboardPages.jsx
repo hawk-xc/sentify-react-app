@@ -1,5 +1,6 @@
 import NavbarSectionPart from "../particles/NavbarSectionPart";
 import SentimentPages from "./SentimentPages";
+import HomePages from "./HomePages";
 import { useState, useEffect } from "react";
 
 const DashboardPages = () => {
@@ -24,7 +25,7 @@ const DashboardPages = () => {
       case "tags":
         return <div>Your Tags</div>;
       case "dashboard":
-        return <div>Welcome to Home</div>;
+        return <HomePages />;
       default:
         return <div>Page Not Found</div>; // Fallback page
     }
