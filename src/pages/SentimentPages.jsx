@@ -8,8 +8,7 @@ import SentimentDetailPages from "./SentimentDetailPages";
 import SentimentSkeletonLoader from '../particles/loading/SentimentSkeletonLoader';
 import LoadingBasic from "../particles/loading/loadingBasic";
 import DashboardReactionChart from '../particles/charts/DashboardReactionChart';
-import { CreateSentimentModal, DeleteTagModal } from "../particles/models";
-import { CreateTagModal } from "../particles/models";
+import { CreateTagModal, CreateSentimentModal, DeleteTagModal } from "../particles/Modals";
 import EmptyDataPart from '../particles/EmptyDataPart';
 
 const SentimentPages = () => {
@@ -21,6 +20,14 @@ const SentimentPages = () => {
   const [detailLoading, setDetailLoading] = useState(false);
   const [dashboardData, setDashboardData] = useState([]);
   const [detailSentiment, setDetailSentiment] = useState(null);
+
+  // socket client 
+  const [processUpdates, setProcessUpdates] = useState([]);
+  const [message, setMessage] = useState(null);
+
+  useEffect(() => {
+    console.log(message);
+  }, [message]);
 
   const fetchTags = async () => {
     try {
@@ -75,6 +82,13 @@ const SentimentPages = () => {
     fetchSentiment();
     fetchDashboardData();
   }, []);
+
+  useEffect(() => {
+    if (message?.step === 6) {
+      fetchSentiment();
+      setMessage(null);
+    }
+  }, [message]);
 
   const handleSentimentClick = (sentimentId) => {
     setDetailLoading(true);
@@ -137,6 +151,10 @@ const SentimentPages = () => {
           getImage={getImage}
           SentimentSkeletonLoader={SentimentSkeletonLoader}
           EmptyDataPart={EmptyDataPart}
+          processUpdates={processUpdates}
+          setProcessUpdates={setProcessUpdates}
+          setMessage={setMessage}
+          message={message}
         />
       )}
     </div>
@@ -161,12 +179,50 @@ const SentimentList = ({
   setActiveTag,
   getImage,
   SentimentSkeletonLoader,
-  EmptyDataPart
+  EmptyDataPart,
+  processUpdates,
+  setProcessUpdates,
+  setMessage,
+  message
 }) => {
+
+  const BadgeSelector = ({step}) => {
+    switch(step) {
+      case 1:
+        return (
+          <span className="badge badge-xs badge-primary"></span>
+        );
+      case 2:
+        return (
+          <span className="badge badge-xs badge-info"></span>
+        );
+      case 3:
+        return (
+          <span className="badge badge-xs badge-info"></span>
+        );
+      case 4:
+        return (
+          <span className="badge badge-xs badge-info"></span>
+        );
+      case 5:
+        return (
+          <span className="badge badge-xs badge-info"></span>
+        );
+      case 6:
+        return (
+          <span className="badge badge-xs badge-success"></span>
+        );
+      default:
+        return (
+          <span className="badge badge-xs badge-error"></span>
+        );
+    }  
+  };
+
   return (
     <div>
-      <CreateSentimentModal tags={tags} />
-      <CreateTagModal fetchTags={fetchTags}/>
+      <CreateSentimentModal tags={tags} processUpdates={processUpdates} setProcessUpdates={setProcessUpdates} setMessage={setMessage} />
+      <CreateTagModal fetchTags={fetchTags} />
       <DeleteTagModal fetchTags={fetchTags} tagId={tagId} fetchSentiment={fetchSentiment} setActiveTag={setActiveTag} />
       <div className="grid grid-cols-12 gap-5">
         <div className="flex flex-col col-span-3 p-5 bg-white rounded-lg shadow-lg">
@@ -232,44 +288,74 @@ const SentimentList = ({
           ) : isLoading ? (
             <SentimentSkeletonLoader />
           ) : sentiment.length > 0 ? (
-            sentiment.map((item, index) => (
-              <div
-                key={index}
-                className="flex flex-col gap-5"
-                onClick={() =>
-                  handleSentimentClick(
-                    item.unique_id || item.sentiment_unique_id
-                  )
-                }
-              >
-                <div className="flex items-center my-1 duration-150 menu bg-base-200 active:bg-base-300 active:scale-95 lg:menu-horizontal rounded-box">
-                  <li className="justify-between w-full active:bg-base-300">
+            <>
+              {message ? message.step > 1 ? (
+                <div
+                  className="relative flex items-center my-1 duration-150 bg-base-200 rounded-box menu lg:menu-horizontal active:bg-base-300 active:scale-95 disabled"
+                >
+                  <li className="w-full justify-between active:bg-base-300 border border-transparent rounded-lg bg-gradient-to-r from-transparent via-blue-300 to-transparent bg-[length:200%_200%] animate-gradient">
                     <span
-                      rel="noopener noreferrer"
                       className="flex justify-between"
+                      data-tip="Tooltip on hover"
                     >
                       <span className="flex flex-row items-center w-full gap-2">
                         <img
-                          src={getImage(item.platform)}
+                          src={getImage(message.message[2])}
                           className="w-10"
                           alt=""
                         />
                         <span className="text-lg font-normal">
-                          {item.title ||
-                            item.unique_id ||
-                            item.sentiment_unique_id ||
-                            item.sentiment_title}
+                          {message.message[3] || 'Sentiment Processing'}
                         </span>
                       </span>
-                      <span className="flex flex-row items-center justify-center gap-2 align-middle">
-                        Success
-                        <span className="badge badge-xs badge-success"></span>
+                      <span className="flex flex-row items-center justify-center gap-2 align-middle w-80 bg-white rounded-lg">
+                        {message.message[0]}
+                        <BadgeSelector step={message.step} />
                       </span>
                     </span>
                   </li>
                 </div>
-              </div>
-            ))
+              ) : '' : ''}
+              {sentiment.map((item, index) => (
+                <div
+                  key={index}
+                  className="flex flex-col gap-5"
+                  onClick={() =>
+                    handleSentimentClick(
+                      item.unique_id || item.sentiment_unique_id
+                    )
+                  }
+                >
+                  <div className="flex items-center my-1 duration-150 menu bg-base-200 active:bg-base-300 active:scale-95 lg:menu-horizontal rounded-box">
+                    <li className="justify-between w-full active:bg-base-300">
+                      <span
+                        rel="noopener noreferrer"
+                        className="flex justify-between"
+                      >
+                        <span className="flex flex-row items-center w-full gap-2">
+                          <img
+                            src={getImage(item.platform)}
+                            className="w-10"
+                            alt=""
+                          />
+                          <span className="text-lg font-normal">
+                            {item.title ||
+                              item.unique_id ||
+                              item.sentiment_unique_id ||
+                              item.sentiment_title}
+                          </span>
+                        </span>
+                        <span className="flex flex-row items-center justify-center gap-2 align-middle">
+                          Success
+                          <span className="badge badge-xs badge-success"></span>
+                        </span>
+                      </span>
+                    </li>
+                  </div>
+                </div>
+              ))
+              }
+            </>
           ) : (
             <EmptyDataPart clearTagClick={clearTagClick} />
           )}

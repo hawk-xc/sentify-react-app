@@ -3,7 +3,7 @@ import daisyui from "daisyui";
 /** @type {import('tailwindcss').Config} */
 export default {
   content: [
-    "./src/**/*.{js,jsx,ts,tsx}", // Sesuaikan dengan struktur proyek Anda
+    "./src/**/*.{js,jsx,ts,tsx}",
   ],
   theme: {
     extend: {
@@ -13,11 +13,17 @@ export default {
       },
       animation: {
         loading: "loading 1.5s ease-in-out infinite",
+        gradient: "gradient 3s infinite linear",
       },
       keyframes: {
         loading: {
           "0%": { transform: "translateX(-100%)" },
           "100%": { transform: "translateX(100%)" },
+        },
+        gradient: {
+          "0%": { backgroundPosition: "0% 50%" },
+          "50%": { backgroundPosition: "100% 50%" },
+          "100%": { backgroundPosition: "0% 50%" },
         },
       },
     },

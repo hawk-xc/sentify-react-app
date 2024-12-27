@@ -3,8 +3,7 @@ import axios from "axios";
 import Cookies from "js-cookie";
 
 const axiosClient = axios.create({
-  baseURL:
-    "https://perceivo-backend-api-132823030367.asia-southeast2.run.app/1.0.0-latest", // URL backend Anda
+  baseURL: import.meta.env.VITE_BACKEND_ENDPOINT || "http://localhost:8080/dev",
 });
 
 axiosClient.interceptors.request.use((config) => {
