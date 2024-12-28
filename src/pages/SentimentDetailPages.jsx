@@ -4,6 +4,7 @@ import tiktokImg from "../assets/images/tiktok.png";
 import instagramImg from "../assets/images/instagram.jpeg";
 import youtubeImg from "../assets/images/youtube.png";
 import googlemapsImg from "../assets/images/googlemaps.png";
+import ExpandableText from '../particles/text/ExpandableText';
 import { DeleteSentimentModal } from "../particles/models";
 
 const SentimentDetailPages = ({ detailSentiment, handleBackToSentiments }) => {
@@ -211,86 +212,90 @@ const SentimentDetailPages = ({ detailSentiment, handleBackToSentiments }) => {
               <span className="text-lg">Top Positive Reaction</span>
               {detailSentiment.statistic.data.topstatus.positive.length > 0
                 ? detailSentiment.statistic.data.topstatus.positive.map(
-                    (item, index) => (
-                      <div
-                        key={index}
-                        className="flex flex-col p-2 my-1 border rounded-lg shadow-md border-slate-100 active:scale-95 duration-150 transition-all hover:cursor-pointer"
-                      >
-                        <div className="flex flex-row justify-between">
-                          <span className="font-semibold">
-                            @{item.username}
-                          </span>
-                          <span className="text-xs text-slate-500">
-                            {timeAgo(
-                              detailSentiment.comments.filter(
-                                (sentiment) =>
-                                  sentiment.username === item.username
-                              )[0].createdAt
-                            )}
-                          </span>
-                        </div>
-                        <span mb-3>{item.text}</span>
-                        {detailSentiment.comments.filter(
-                          (sentiment) => sentiment.username === item.username
-                        )[0].likes > 0 ? (
-                          <div className="block mt-3">
-                            👍{" "}
-                            {
-                              detailSentiment.comments.filter(
-                                (sentiment) =>
-                                  sentiment.username === item.username
-                              )[0].likes
-                            }
-                          </div>
-                        ) : (
-                          <div className="block mt-3">👍 0</div>
-                        )}
+                  (item, index) => (
+                    <div
+                      key={index}
+                      className="flex flex-col p-2 my-1 border rounded-lg shadow-md border-slate-100 active:shadow-md hover:shadow-lg duration-150 transition-all hover:cursor-pointer"
+                    >
+                      <div className="flex flex-row justify-between">
+                        <span className="font-semibold">
+                          {item.username[0] == '@' ? item.username : '@'}
+                        </span>
+                        <span className="text-xs text-slate-500">
+                          {item.created_at && timeAgo(
+                            detailSentiment.comments.filter(
+                              (sentiment) =>
+                                sentiment.username === item.username
+                            )[0].createdAt
+                          )}
+                        </span>
                       </div>
-                    )
+                      <span className="mb-3">
+                        <ExpandableText text={item.text} maxWords={20} />
+                      </span>
+                      {detailSentiment.comments.filter(
+                        (sentiment) => sentiment.username === item.username
+                      )[0].likes > 0 ? (
+                        <div className="block mt-3">
+                          👍{" "}
+                          {
+                            detailSentiment.comments.filter(
+                              (sentiment) =>
+                                sentiment.username === item.username
+                            )[0].likes
+                          }
+                        </div>
+                      ) : (
+                        <div className="block mt-3">👍 0</div>
+                      )}
+                    </div>
                   )
+                )
                 : "No Positive Reaction"}
             </div>
             <div className="flex flex-col">
               <span className="text-lg">Top Negative Reaction</span>
               {detailSentiment.statistic.data.topstatus.negative.length > 0
                 ? detailSentiment.statistic.data.topstatus.negative.map(
-                    (item, index) => (
-                      <div
-                        key={index}
-                        className="flex flex-col p-2 my-1 border rounded-lg shadow-md border-slate-100 active:scale-95 duration-150 transition-all hover:cursor-pointer"
-                      >
-                        <div className="flex flex-row justify-between">
-                          <span className="font-semibold">
-                            @{item.username}
-                          </span>
-                          <span className="text-xs text-slate-500">
-                            {timeAgo(
-                              detailSentiment.comments.filter(
-                                (sentiment) =>
-                                  sentiment.username === item.username
-                              )[0].createdAt
-                            )}
-                          </span>
-                        </div>
-                        <span className="mb-3">{item.text}</span>
-                        {detailSentiment.comments.filter(
-                          (sentiment) => sentiment.username === item.username
-                        )[0].likes > 0 ? (
-                          <div className="block mt-3">
-                            👍{" "}
-                            {
-                              detailSentiment.comments.filter(
-                                (sentiment) =>
-                                  sentiment.username === item.username
-                              )[0].likes
-                            }
-                          </div>
-                        ) : (
-                          <div className="block mt-3">👍 0</div>
-                        )}
+                  (item, index) => (
+                    <div
+                      key={index}
+                      className="flex flex-col p-2 my-1 border rounded-lg shadow-md border-slate-100 active:shadow-md hover:shadow-lg duration-150 transition-all hover:cursor-pointer"
+                    >
+                      <div className="flex flex-row justify-between">
+                        <span className="font-semibold">
+                          {item.username[0] == '@' ? item.username : '@'}
+                        </span>
+                        <span className="text-xs text-slate-500">
+                          {item.created_at && timeAgo(
+                            detailSentiment.comments.filter(
+                              (sentiment) =>
+                                sentiment.username === item.username
+                            )[0].createdAt
+                          )}
+                        </span>
                       </div>
-                    )
+                      <span className="mb-3">
+                        <ExpandableText text={item.text} maxWords={20} />
+                      </span>
+                      {detailSentiment.comments.filter(
+                        (sentiment) => sentiment.username === item.username
+                      )[0].likes > 0 ? (
+                        <div className="block mt-3">
+                          👍{" "}
+                          {
+                            detailSentiment.comments.filter(
+                              (sentiment) =>
+                                sentiment.username === item.username
+                            )[0].likes
+                          }
+                        </div>
+                      ) : (
+                        <div className="block mt-3">👍 0</div>
+                      )}
+                    </div>
                   )
+                )
                 : "No Negative Reaction"}
             </div>
           </div>
@@ -302,19 +307,23 @@ const SentimentDetailPages = ({ detailSentiment, handleBackToSentiments }) => {
           {detailSentiment.statistic.data.questions.map((item, index) => (
             <div
               key={index}
-              className="flex flex-col p-2 my-1 border rounded-lg shadow-md border-slate-100 md:w-80 active:scale-95 duration-150 transition-all hover:cursor-pointer"
+              className="flex flex-col p-2 my-1 border rounded-lg shadow-md border-slate-100 md:w-80 hover:shadow-xl active:shadow-md duration-150 transition-all hover:cursor-pointer"
             >
               <div className="flex flex-row justify-between">
-                <span className="font-semibold">@{item.username}</span>
+                <span className="font-semibold">
+                  {item.username[0] == '@' ? item.username : '@'}
+                </span>
                 <span className="text-xs text-slate-500">
-                  {timeAgo(
+                  {item.created_at && timeAgo(
                     detailSentiment.comments.filter(
                       (sentiment) => sentiment.username === item.username
                     )[0].createdAt
                   )}
                 </span>
               </div>
-              <span className="mb-3">{item.text}</span>
+              <span className="mb-3">
+                <ExpandableText text={item.text} maxWords={20} />
+              </span>
               {detailSentiment.comments.filter(
                 (sentiment) => sentiment.username === item.username
               )[0].likes > 0 ? (
