@@ -5,6 +5,7 @@ import youtubeImg from "../assets/images/youtube.png";
 import googlemapsImg from "../assets/images/googlemaps.png";
 import axiosClient from "../api/axiosClient";
 import LoadingOverlay from './loading/loadingOverlay';
+import * as Yup from 'yup';
 
 import { io } from 'socket.io-client';
 import Cookies from "js-cookie";
@@ -21,6 +22,7 @@ export const CreateSentimentModal = (props) => {
   const [resultLimit, setResultLimit] = useState(5);
   const [tags, setTags] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [linkError, setLinkError] = useState(false);
 
   useEffect(() => {
     socket.on('process-update', (update) => {
@@ -43,13 +45,24 @@ export const CreateSentimentModal = (props) => {
 
     setIsLoading(true);
     try {
+      // Schema Validasi Yup
+      const schema = Yup.object().shape({
+        link: Yup.string()
+          .url()
+          .required(),
+      });
+
+      // Validasi link sebelum melanjutkan proses
+      await schema.validate({ link: sentimentLink });
+      setLinkError(false); // Validasi lulus
+
       const response_data = {
         link: sentimentLink,
         platformName: selectedSocialMedia,
         title: sentimentTitle,
         tags: tags,
-        resultLimit: parseInt(resultLimit, 10)
-      }
+        resultLimit: parseInt(resultLimit, 10),
+      };
 
       document.getElementById("my_modal_1").close();
 
@@ -58,17 +71,19 @@ export const CreateSentimentModal = (props) => {
         headers: {
           'Content-Type': 'application/json',
           'socket-id': socketId,
-          'Authorization': 'Bearer ' + Cookies.get('token')
+          'Authorization': 'Bearer ' + Cookies.get('token'),
         },
         body: JSON.stringify(response_data),
       });
 
       setIsLoading(false);
     } catch (error) {
-      console.log(error);
+      if (error.name === 'ValidationError') {
+        setLinkError(true); // Validasi gagal
+      }
       setIsLoading(false);
     }
-  }
+  };
 
   useEffect(() => {
     if (props.processUpdates.length > 0) {
@@ -199,10 +214,13 @@ export const CreateSentimentModal = (props) => {
           </div>
           <div className="flex flex-col gap-1">
             Sentiment Link
-            <label className="flex items-center gap-2 input input-bordered">
+            <label className={`flex items-center gap-2 input input-bordered ${linkError && 'input-error'}`} >
               🔗
-              <input type="text" className="grow" placeholder="Link" required onChange={(e) => setSentimentLink(e.target.value)} value={sentimentLink} />
+              <input type="text" className="grow" placeholder="Link" required onChange={(e) => setSentimentLink(e.target.value)} value={sentimentLink} autoFocus={linkError} />
             </label>
+            {linkError && (
+              <span className="text-red-500 text-sm">🔐 URL not valid, please check this URL format!</span>
+            )}
           </div>
           <div className="flex flex-col gap-1">
             Total Comments
@@ -266,7 +284,7 @@ export const CreateTagModal = (props) => {
       console.error(`error : ${error}`);
     }
   }
-  
+
   return (
     <dialog id="my_modal_2" className="modal">
       <div className="modal-box">

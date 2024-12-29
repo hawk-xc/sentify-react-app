@@ -322,7 +322,7 @@ const SentimentList = ({
                             {message.message[3] || "Sentiment Processing"}
                           </span>
                         </span>
-                        <span className="flex flex-row items-center justify-center gap-2 align-middle bg-white rounded-lg w-80">
+                        <span className="flex flex-row items-center justify-center gap-2 align-middle bg-white rounded-lg w-80 text-xs p-2">
                           {message.message[0]}
                           <BadgeSelector step={message.step} />
                         </span>
