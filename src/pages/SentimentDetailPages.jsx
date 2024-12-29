@@ -219,7 +219,7 @@ const SentimentDetailPages = ({ detailSentiment, handleBackToSentiments }) => {
                     >
                       <div className="flex flex-row justify-between">
                         <span className="font-semibold">
-                          {item.username[0] == '@' ? item.username : '@'}
+                          {item.username[0] == '@' ? item.username : '@' + item.username}
                         </span>
                         <span className="text-xs text-slate-500">
                           {item.created_at && timeAgo(
@@ -264,7 +264,7 @@ const SentimentDetailPages = ({ detailSentiment, handleBackToSentiments }) => {
                     >
                       <div className="flex flex-row justify-between">
                         <span className="font-semibold">
-                          {item.username[0] == '@' ? item.username : '@'}
+                          {item.username[0] == '@' ? item.username : '@' + item.username}
                         </span>
                         <span className="text-xs text-slate-500">
                           {item.created_at && timeAgo(
@@ -311,7 +311,7 @@ const SentimentDetailPages = ({ detailSentiment, handleBackToSentiments }) => {
             >
               <div className="flex flex-row justify-between">
                 <span className="font-semibold">
-                  {item.username[0] == '@' ? item.username : '@'}
+                  {item.username[0] == '@' ? item.username : '@' + item.username}
                 </span>
                 <span className="text-xs text-slate-500">
                   {item.created_at && timeAgo(

@@ -239,7 +239,7 @@ export const CreateSentimentModal = (props) => {
             <button className="btn bg-sky-200" type="submit">
               Add Sentiment
             </button>
-            <button className="btn" onClick={() => document.getElementById("my_modal_1").close()}>Close</button>
+            <button className="btn" onClick={() => document.getElementById("my_modal_1").close()} type="button">Close</button>
           </div>
         </form>
       </div>
@@ -266,6 +266,7 @@ export const CreateTagModal = (props) => {
       console.error(`error : ${error}`);
     }
   }
+  
   return (
     <dialog id="my_modal_2" className="modal">
       <div className="modal-box">
@@ -302,7 +303,7 @@ export const CreateTagModal = (props) => {
             <button className="btn bg-sky-200" type="submit">
               Add Tag
             </button>
-            <button className="btn" onClick={() => document.getElementById("my_modal_2").close()}>Close</button>
+            <button className="btn" onClick={() => document.getElementById("my_modal_2").close()} type="button">Close</button>
           </div>
         </form>
       </div>
