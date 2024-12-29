@@ -5,11 +5,15 @@ import instagramImg from "../assets/images/instagram.jpeg";
 import youtubeImg from "../assets/images/youtube.png";
 import googlemapsImg from "../assets/images/googlemaps.png";
 import SentimentDetailPages from "./SentimentDetailPages";
-import SentimentSkeletonLoader from '../particles/loading/SentimentSkeletonLoader';
+import SentimentSkeletonLoader from "../particles/loading/SentimentSkeletonLoader";
 import LoadingBasic from "../particles/loading/loadingBasic";
-import DashboardReactionChart from '../particles/charts/DashboardReactionChart';
-import { CreateTagModal, CreateSentimentModal, DeleteTagModal } from "../particles/Modals";
-import EmptyDataPart from '../particles/EmptyDataPart';
+import DashboardReactionChart from "../particles/charts/DashboardReactionChart";
+import {
+  CreateTagModal,
+  CreateSentimentModal,
+  DeleteTagModal,
+} from "../particles/Modals";
+import EmptyDataPart from "../particles/EmptyDataPart";
 
 const SentimentPages = () => {
   const [tags, setTags] = useState([]);
@@ -21,7 +25,7 @@ const SentimentPages = () => {
   const [dashboardData, setDashboardData] = useState([]);
   const [detailSentiment, setDetailSentiment] = useState(null);
 
-  // socket client 
+  // socket client
   const [processUpdates, setProcessUpdates] = useState([]);
   const [message, setMessage] = useState(null);
 
@@ -107,7 +111,7 @@ const SentimentPages = () => {
   const clearTagClick = () => {
     setActiveTag(null);
     fetchSentiment();
-  }
+  };
 
   const getImage = (platform) => {
     switch (platform) {
@@ -183,62 +187,54 @@ const SentimentList = ({
   processUpdates,
   setProcessUpdates,
   setMessage,
-  message
+  message,
 }) => {
-
-  const BadgeSelector = ({step}) => {
-    switch(step) {
+  const BadgeSelector = ({ step }) => {
+    switch (step) {
       case 1:
-        return (
-          <span className="badge badge-xs badge-primary"></span>
-        );
+        return <span className="badge badge-xs badge-primary"></span>;
       case 2:
-        return (
-          <span className="badge badge-xs badge-info"></span>
-        );
+        return <span className="badge badge-xs badge-info"></span>;
       case 3:
-        return (
-          <span className="badge badge-xs badge-info"></span>
-        );
+        return <span className="badge badge-xs badge-info"></span>;
       case 4:
-        return (
-          <span className="badge badge-xs badge-info"></span>
-        );
+        return <span className="badge badge-xs badge-info"></span>;
       case 5:
-        return (
-          <span className="badge badge-xs badge-info"></span>
-        );
+        return <span className="badge badge-xs badge-info"></span>;
       case 6:
-        return (
-          <span className="badge badge-xs badge-success"></span>
-        );
+        return <span className="badge badge-xs badge-success"></span>;
       default:
-        return (
-          <span className="badge badge-xs badge-error"></span>
-        );
-    }  
+        return <span className="badge badge-xs badge-error"></span>;
+    }
   };
 
   return (
     <div>
-      <CreateSentimentModal tags={tags} processUpdates={processUpdates} setProcessUpdates={setProcessUpdates} setMessage={setMessage} />
+      <CreateSentimentModal
+        tags={tags}
+        processUpdates={processUpdates}
+        setProcessUpdates={setProcessUpdates}
+        setMessage={setMessage}
+      />
       <CreateTagModal fetchTags={fetchTags} />
-      <DeleteTagModal fetchTags={fetchTags} tagId={tagId} fetchSentiment={fetchSentiment} setActiveTag={setActiveTag} />
+      <DeleteTagModal
+        fetchTags={fetchTags}
+        tagId={tagId}
+        fetchSentiment={fetchSentiment}
+        setActiveTag={setActiveTag}
+      />
       <div className="grid grid-cols-12 gap-5">
         <div className="flex flex-col col-span-3 p-5 bg-white rounded-lg shadow-lg">
-          <h2 className="mb-3 text-3xl font-extrabold opacity-85">🏷️ My Tags</h2>
-          <button
-            className="mb-3 shadow-md btn bg-sky-100 hover:bg-sky-200"
-            onClick={() => document.getElementById("my_modal_2").showModal()}
-          >
-            Add Tags ➕
-          </button>
+          <h2 className="mb-3 text-3xl font-extrabold opacity-85">
+            🏷️ My Tags
+          </h2>
           {tags.length > 0 ? (
             <div className="flex flex-row flex-wrap">
               <button
                 onClick={() => handleTagClick(null)}
-                className={`hover:cursor-pointer active:scale-95 duration-150 flex flex-row gap-1 m-1 p-2 rounded-box ${activeTag === null ? "bg-blue-500 text-white" : "bg-base-200"
-                  }`}
+                className={`hover:cursor-pointer active:scale-95 duration-150 flex flex-row gap-1 m-1 p-2 rounded-box ${
+                  activeTag === null ? "bg-blue-500 text-white" : "bg-base-200"
+                }`}
               >
                 🏷️ All
               </button>
@@ -248,21 +244,35 @@ const SentimentList = ({
                   onClick={() =>
                     detailLoading ? null : handleTagClick(tag.unique_id)
                   }
-                  className={`hover:cursor-pointer active:scale-95 duration-150 flex flex-row gap-1 m-1 px-3 py-2 rounded-box ${activeTag === tag.unique_id
-                    ? "bg-blue-500 text-white"
-                    : "bg-base-200"
-                    }`}
+                  className={`hover:cursor-pointer active:scale-95 duration-150 flex flex-row gap-1 m-1 px-3 py-2 text-sm rounded-box ${
+                    activeTag === tag.unique_id
+                      ? "bg-blue-500 text-white"
+                      : "bg-base-200"
+                  }`}
                 >
                   🏷️ {tag.tag_name}
-                  <button className={`rounded-full flex justify-center align-middle items-center opacity-55 hover:opacity-100 z-50 active:scale-105 duration-150 ${activeTag === tag.unique_id ? "" : "hidden"} ml-2`} onClick={() => {
-                    setTagId(tag.unique_id)
-                    document.getElementById("my_modal_3").showModal()
-                  }}>
+                  <button
+                    className={`rounded-full flex justify-center align-middle items-center opacity-55 hover:opacity-100 z-50 active:scale-105 duration-150 ${
+                      activeTag === tag.unique_id ? "" : "hidden"
+                    } ml-2`}
+                    onClick={() => {
+                      setTagId(tag.unique_id);
+                      document.getElementById("my_modal_3").showModal();
+                    }}
+                  >
                     <i className="ri-delete-bin-5-line"></i>
                     delete
                   </button>
                 </div>
               ))}
+              <div
+                className="flex flex-row gap-1 px-3 py-2 m-1 text-sm duration-150 hover:cursor-pointer active:scale-95 rounded-box bg-base-200"
+                onClick={() =>
+                  document.getElementById("my_modal_2").showModal()
+                }
+              >
+                <i className="ri-add-fill"></i> New Tag
+              </div>
             </div>
           ) : (
             <div className="flex flex-col items-center justify-center w-full h-full align-middle">
@@ -274,13 +284,18 @@ const SentimentList = ({
 
         <div className="flex flex-col col-span-6 p-5 bg-white rounded-lg shadow-lg">
           <div className="flex flex-row items-center justify-between">
-            <h2 className="mb-3 text-3xl font-extrabold opacity-85">😃 My Sentiment</h2>
-            {sentiment.length > 0 && (<button
-              className="mb-3 shadow-md btn bg-sky-100 hover:bg-sky-200"
-              onClick={() => document.getElementById("my_modal_1").showModal()}
-            >
-              Add Sentiment ➕
-            </button>
+            <h2 className="mb-3 text-3xl font-extrabold opacity-85">
+              😃 My Sentiment
+            </h2>
+            {sentiment.length > 0 && (
+              <button
+                className="mb-3 shadow-md rounded-xl btn bg-sky-100 hover:bg-sky-200"
+                onClick={() =>
+                  document.getElementById("my_modal_1").showModal()
+                }
+              >
+                Add Sentiment ➕
+              </button>
             )}
           </div>
           {detailLoading ? (
@@ -289,33 +304,37 @@ const SentimentList = ({
             <SentimentSkeletonLoader />
           ) : sentiment.length > 0 ? (
             <>
-              {message ? message.step > 1 ? (
-                <div
-                  className="relative flex items-center my-1 duration-150 bg-base-200 rounded-box menu lg:menu-horizontal active:bg-base-300 active:scale-95 disabled"
-                >
-                  <li className="w-full justify-between active:bg-base-300 border border-transparent rounded-lg bg-gradient-to-r from-transparent via-blue-300 to-transparent bg-[length:200%_200%] animate-gradient">
-                    <span
-                      className="flex justify-between"
-                      data-tip="Tooltip on hover"
-                    >
-                      <span className="flex flex-row items-center w-full gap-2">
-                        <img
-                          src={getImage(message.message[2])}
-                          className="w-10"
-                          alt=""
-                        />
-                        <span className="text-lg font-normal">
-                          {message.message[3] || 'Sentiment Processing'}
+              {message ? (
+                message.step > 1 ? (
+                  <div className="relative flex items-center my-1 duration-150 bg-base-200 rounded-box menu lg:menu-horizontal active:bg-base-300 active:scale-95 disabled">
+                    <li className="w-full justify-between active:bg-base-300 border border-transparent rounded-lg bg-gradient-to-r from-transparent via-blue-300 to-transparent bg-[length:200%_200%] animate-gradient">
+                      <span
+                        className="flex justify-between"
+                        data-tip="Tooltip on hover"
+                      >
+                        <span className="flex flex-row items-center w-full gap-2">
+                          <img
+                            src={getImage(message.message[2])}
+                            className="w-10"
+                            alt=""
+                          />
+                          <span className="text-lg font-normal">
+                            {message.message[3] || "Sentiment Processing"}
+                          </span>
+                        </span>
+                        <span className="flex flex-row items-center justify-center gap-2 align-middle bg-white rounded-lg w-80">
+                          {message.message[0]}
+                          <BadgeSelector step={message.step} />
                         </span>
                       </span>
-                      <span className="flex flex-row items-center justify-center gap-2 align-middle w-80 bg-white rounded-lg">
-                        {message.message[0]}
-                        <BadgeSelector step={message.step} />
-                      </span>
-                    </span>
-                  </li>
-                </div>
-              ) : '' : ''}
+                    </li>
+                  </div>
+                ) : (
+                  ""
+                )
+              ) : (
+                ""
+              )}
               {sentiment.map((item, index) => (
                 <div
                   key={index}
@@ -353,29 +372,42 @@ const SentimentList = ({
                     </li>
                   </div>
                 </div>
-              ))
-              }
+              ))}
             </>
           ) : (
             <EmptyDataPart clearTagClick={clearTagClick} />
           )}
         </div>
 
-        <div className="col-span-3 p-5 bg-white rounded-lg shadow-lg flex flex-col gap-3">
-          <h2 className="mb-3 text-3xl font-extrabold opacity-85">🔎 Statistic</h2>
-          <div className="p-4 bg-orange-50 rounded-lg">
+        <div className="flex flex-col col-span-3 gap-3 p-5 bg-white rounded-lg shadow-lg">
+          <h2 className="mb-3 text-3xl font-extrabold opacity-85">
+            🔎 Statistic
+          </h2>
+          <div className="p-4 rounded-lg bg-orange-50">
             <span className="text-sm">All Sentiment</span>
-            <h3 className="font-bold text-4xl opacity-80">{dashboardData.sentiment_count || 0}</h3>
+            <h3 className="text-4xl font-bold opacity-80">
+              {dashboardData.sentiment_count || 0}
+            </h3>
           </div>
-          <div className="p-4 bg-orange-50 rounded-lg">
+          <div className="p-4 rounded-lg bg-orange-50">
             <span className="text-sm">All Comments</span>
-            <h3 className="font-bold text-4xl opacity-80">{dashboardData.total_comments || 0}</h3>
+            <h3 className="text-4xl font-bold opacity-80">
+              {dashboardData.total_comments || 0}
+            </h3>
           </div>
-          <div className="w-full flex justify-center flex-col align-middle items-center bg-orange-50 rounded-lg p-3">
-            <div className="w-full flex items-start mb-3">
+          <div className="flex flex-col items-center justify-center w-full p-3 align-middle rounded-lg bg-orange-50">
+            <div className="flex items-start w-full mb-3">
               <span className="text-sm">All Reactions</span>
             </div>
-            <DashboardReactionChart data={dashboardData.total_reactions || { positive: 0, negative: 0, neutral: 0 }} />
+            <DashboardReactionChart
+              data={
+                dashboardData.total_reactions || {
+                  positive: 0,
+                  negative: 0,
+                  neutral: 0,
+                }
+              }
+            />
           </div>
         </div>
       </div>
