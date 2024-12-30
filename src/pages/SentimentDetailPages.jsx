@@ -81,10 +81,15 @@ const SentimentDetailPages = ({ detailSentiment, handleBackToSentiments }) => {
           <h1 className="text-2xl">
             {detailSentiment.title || `Sentiment ${detailSentiment.unique_id}`}
           </h1>
-          <span className="flex flex-col">
-            {detailSentiment.sentiment_link.split(", ").map((item, index) => (
+          <div id="tags" className="flex flex-row gap-2">
+            {detailSentiment.tags.map((tag, index) => (
+              <span className="badge badge-md">{tag}</span>
+            ))}
+          </div>
+          <span className="flex flex-col mt-4">
+            {detailSentiment.sentiment_link.split(", ").map((link, index) => (
               <a
-                href={item}
+                href={link}
                 target="_blank"
                 key={index}
                 className="text-blue-300 hover:text-blue-500"
@@ -222,12 +227,16 @@ const SentimentDetailPages = ({ detailSentiment, handleBackToSentiments }) => {
                           {item.username[0] == '@' ? item.username : '@' + item.username}
                         </span>
                         <span className="text-xs text-slate-500">
-                          {item.created_at && timeAgo(
+                          {detailSentiment.comments.filter(
+                            (sentiment) =>
+                              sentiment.username === item.username
+                          )[0].createdAt && timeAgo(
                             detailSentiment.comments.filter(
                               (sentiment) =>
                                 sentiment.username === item.username
                             )[0].createdAt
-                          )}
+                          )
+                          }
                         </span>
                       </div>
                       <span className="mb-3">
@@ -267,12 +276,16 @@ const SentimentDetailPages = ({ detailSentiment, handleBackToSentiments }) => {
                           {item.username[0] == '@' ? item.username : '@' + item.username}
                         </span>
                         <span className="text-xs text-slate-500">
-                          {item.created_at && timeAgo(
+                          {detailSentiment.comments.filter(
+                            (sentiment) =>
+                              sentiment.username === item.username
+                          )[0].createdAt && timeAgo(
                             detailSentiment.comments.filter(
                               (sentiment) =>
                                 sentiment.username === item.username
                             )[0].createdAt
-                          )}
+                          )
+                          }
                         </span>
                       </div>
                       <span className="mb-3">
@@ -301,6 +314,53 @@ const SentimentDetailPages = ({ detailSentiment, handleBackToSentiments }) => {
           </div>
         </div>
       </div>
+      {detailSentiment.statistic.data.assistances.length > 0 ? (<div className="flex flex-col gap-2 p-5 mt-3 border rounded-lg shadow-sm border-slate-200">
+        <h1 className="text-xl">Assistance</h1>
+        <div className="flex flex-row flex-wrap items-center w-full gap-3 p-5 align-middle">
+          {detailSentiment.statistic.data.assistances.map((item, index) => (
+            <div
+              key={index}
+              className="flex flex-col p-2 my-1 border rounded-lg shadow-md border-slate-100 md:w-80 hover:shadow-xl active:shadow-md duration-150 transition-all hover:cursor-pointer"
+            >
+              <div className="flex flex-row justify-between">
+                <span className="font-semibold">
+                  {item.username[0] == '@' ? item.username : '@' + item.username}
+                </span>
+                <span className="text-xs text-slate-500">
+                  {detailSentiment.comments.filter(
+                    (sentiment) =>
+                      sentiment.username === item.username
+                  )[0].createdAt && timeAgo(
+                    detailSentiment.comments.filter(
+                      (sentiment) =>
+                        sentiment.username === item.username
+                    )[0].createdAt
+                  )
+                  }
+                </span>
+              </div>
+              <span className="mb-3">
+                <ExpandableText text={item.text} maxWords={20} />
+              </span>
+              {detailSentiment.comments.filter(
+                (sentiment) => sentiment.username === item.username
+              )[0].likes > 0 ? (
+                <div className="block mt-3">
+                  👍{" "}
+                  {
+                    detailSentiment.comments.filter(
+                      (sentiment) => sentiment.username === item.username
+                    )[0].likes
+                  }
+                </div>
+              ) : (
+                <div className="block mt-3">👍 0</div>
+              )}
+            </div>
+          ))}
+        </div>
+      </div>
+      ) : ""}
       {detailSentiment.statistic.data.questions.length > 0 ? (<div className="flex flex-col gap-2 p-5 mt-3 border rounded-lg shadow-sm border-slate-200">
         <h1 className="text-xl">Questions</h1>
         <div className="flex flex-row flex-wrap items-center w-full gap-3 p-5 align-middle">
@@ -314,11 +374,16 @@ const SentimentDetailPages = ({ detailSentiment, handleBackToSentiments }) => {
                   {item.username[0] == '@' ? item.username : '@' + item.username}
                 </span>
                 <span className="text-xs text-slate-500">
-                  {item.created_at && timeAgo(
+                  {detailSentiment.comments.filter(
+                    (sentiment) =>
+                      sentiment.username === item.username
+                  )[0].createdAt && timeAgo(
                     detailSentiment.comments.filter(
-                      (sentiment) => sentiment.username === item.username
+                      (sentiment) =>
+                        sentiment.username === item.username
                     )[0].createdAt
-                  )}
+                  )
+                  }
                 </span>
               </div>
               <span className="mb-3">

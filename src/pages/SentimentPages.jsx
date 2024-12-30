@@ -29,10 +29,6 @@ const SentimentPages = () => {
   const [processUpdates, setProcessUpdates] = useState([]);
   const [message, setMessage] = useState(null);
 
-  useEffect(() => {
-    console.log(message);
-  }, [message]);
-
   const fetchTags = async () => {
     try {
       const response = await axiosClient.get("/tags");
