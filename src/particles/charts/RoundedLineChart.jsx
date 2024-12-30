@@ -98,7 +98,7 @@ const RoundedLineChart = ({ data }) => {
   }, []);
 
   return (
-    <div style={{ width: "100%", height: "400px" }}>
+    <div style={{ width: "100%", height: "300px" }}>
       <Line ref={chartRef} data={chartData} options={options} />
     </div>
   );

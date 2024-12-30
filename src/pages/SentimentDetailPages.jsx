@@ -5,7 +5,7 @@ import instagramImg from "../assets/images/instagram.jpeg";
 import youtubeImg from "../assets/images/youtube.png";
 import googlemapsImg from "../assets/images/googlemaps.png";
 import ExpandableText from '../particles/text/ExpandableText';
-import { DeleteSentimentModal } from "../particles/models";
+import { DeleteSentimentModal } from "../particles/Modals";
 
 const SentimentDetailPages = ({ detailSentiment, handleBackToSentiments }) => {
   const reaction = {

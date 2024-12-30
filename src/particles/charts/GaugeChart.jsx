@@ -51,7 +51,7 @@ const GaugeChart = ({ data }) => {
   const dominant = getDominantLabel();
 
   return (
-    <div style={{ position: "relative", width: "400px", height: "400px" }}>
+    <div style={{ position: "relative", width: "300px", height: "300px" }}>
       <Doughnut data={chartData} options={options} />
       <div
         style={{

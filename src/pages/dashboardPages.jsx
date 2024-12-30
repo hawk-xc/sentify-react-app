@@ -4,7 +4,7 @@ import HomePages from "./HomePages";
 import { useState, useEffect } from "react";
 
 const DashboardPages = () => {
-  const pages = ["dashboard", "profile", "sentiment", "tags"];
+  const pages = ["dashboard", "sentiment"];
 
   const [page, setPage] = useState(() => {
     const storedPage = localStorage.getItem("currentPage");
@@ -18,12 +18,8 @@ const DashboardPages = () => {
 
   const renderContent = () => {
     switch (page) {
-      case "profile":
-        return <div>Your Profile Details</div>;
       case "sentiment":
         return <SentimentPages />;
-      case "tags":
-        return <div>Your Tags</div>;
       case "dashboard":
         return <HomePages />;
       default:
