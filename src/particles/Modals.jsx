@@ -5,6 +5,7 @@ import youtubeImg from "../assets/images/youtube.png";
 import googlemapsImg from "../assets/images/googlemaps.png";
 import axiosClient from "../api/axiosClient";
 import LoadingOverlay from './loading/loadingOverlay';
+
 import * as Yup from 'yup';
 
 import { io } from 'socket.io-client';
@@ -438,6 +439,7 @@ export const DeleteTagModal = (props) => {
 
 export const SentimentSearchModal = (props) => {
   const [sentimentData, setSentimentData] = useState();
+  const [emptyData, setEmptyData] = useState(false);
 
   const handleSearchSentiment = (e) => {
     const searchKeyword = e.target.value;
@@ -446,8 +448,12 @@ export const SentimentSearchModal = (props) => {
     const filteredSentiments = sentiments.filter((s) => s.sentiment_title && s.sentiment_title.toLowerCase().includes(searchKeyword.toLowerCase()));
 
     if (filteredSentiments.length > 0) {
+      setEmptyData(false);
       setSentimentData(filteredSentiments);
-      console.log(filteredSentiments);
+      console.log(filteredSentiments)
+    } else {
+      setEmptyData(true);
+      setSentimentData([]);
     }
   }
 
@@ -468,6 +474,7 @@ export const SentimentSearchModal = (props) => {
 
   return (
     <dialog id="my_modal_3" className="modal">
+      {props.detailLoading && <LoadingOverlay />}
       <div className="modal-box">
         <h3 className="text-lg font-bold text-center">Search All Sentiment</h3>
         <div className="mt-4">
@@ -486,7 +493,7 @@ export const SentimentSearchModal = (props) => {
           </label>
           <div id="sentimentData" className="w-full mt-3 gap-2 flex flex-col">
             {sentimentData && sentimentData.map((sentiment, index) => (
-              <span key={index} className="font-normal text-xl border border-slate-200 cursor-pointer duration-150 rounded-lg shadow-sm hover:shadow-md flex-row p-2 w-full items-center flex hover:bg-slate-50 active:bg-slate-100 gap-3 text-slate-700">
+              <span key={index} className="font-normal text-xl border border-slate-200 cursor-pointer duration-150 rounded-lg shadow-sm hover:shadow-md flex-row p-2 w-full items-center flex hover:bg-slate-50 active:bg-slate-100 gap-3 text-slate-700" onClick={() => props.fetchSentimentDetail(sentiment.sentiment_unique_id)}>
                 <i className={`${definePlatformIcon(sentiment.platform)} text-5xl`} />
                 <div className="flex flex-col">
                   <span>{sentimentData && sentiment.sentiment_title}</span>
@@ -500,6 +507,7 @@ export const SentimentSearchModal = (props) => {
                 </div>
               </span>
             ))}
+            {emptyData && (<div className="text-center p-5">😔 data not found...</div>)}
           </div>
         </div>
         <div className="modal-action">
