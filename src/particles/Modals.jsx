@@ -437,10 +437,10 @@ export const DeleteTagModal = (props) => {
 }
 
 export const SentimentSearchModal = (props) => {
-  const [sentimentData, setSentimentData] = useState(); 
-  
+  const [sentimentData, setSentimentData] = useState();
+
   const handleSearchSentiment = (e) => {
-    const searchKeyword = e.target.value();
+    const searchKeyword = e.target.value;
     const sentiments = props.dashboardData.sentiment_data;
 
     const filteredSentiments = sentiments.filter((s) => s.sentiment_title && s.sentiment_title.toLowerCase().includes(searchKeyword.toLowerCase()));
@@ -484,21 +484,22 @@ export const SentimentSearchModal = (props) => {
                 clipRule="evenodd" />
             </svg>
           </label>
-          <div id="sentimentData" className="w-full mt-3">
-            <span className="font-normal text-xl border border-slate-200 cursor-pointer duration-150 rounded-lg shadow-sm hover:shadow-md flex-row p-2 w-full items-center flex hover:bg-slate-50 active:bg-slate-100 gap-3 text-slate-700">
-              <i className={`${definePlatformIcon('instagram')} text-5xl`} />
-              <div className="flex flex-col">
-                <span>Villain 123</span>
-                <span>
-                  <span className="badge">
-                    satu
+          <div id="sentimentData" className="w-full mt-3 gap-2 flex flex-col">
+            {sentimentData && sentimentData.map((sentiment, index) => (
+              <span key={index} className="font-normal text-xl border border-slate-200 cursor-pointer duration-150 rounded-lg shadow-sm hover:shadow-md flex-row p-2 w-full items-center flex hover:bg-slate-50 active:bg-slate-100 gap-3 text-slate-700">
+                <i className={`${definePlatformIcon(sentiment.platform)} text-5xl`} />
+                <div className="flex flex-col">
+                  <span>{sentimentData && sentiment.sentiment_title}</span>
+                  <span>
+                    {sentiment.tags && sentiment.tags.split(',').map((tag) => (
+                      <span className="badge" key={tag}>
+                        {tag || ""}
+                      </span>
+                    ))}
                   </span>
-                  <span className="badge">
-                    dua
-                  </span>
-                </span>
-              </div>
-            </span>
+                </div>
+              </span>
+            ))}
           </div>
         </div>
         <div className="modal-action">

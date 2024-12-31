@@ -69,7 +69,7 @@ const HomePages = () => {
           <span>Welcome to Sentify</span>
         </div>
         <div id="searchButton" className="w-full flex flex-row justify-end">
-          <button className="btn flex font-normal flex-row border border-slate-200" onClick={() => document.getElementById("my_modal_3").showModal()}>
+          <button className="btn flex font-normal flex-row border border-slate-200" onClick={() => dashboardData.sentiment_data.length > 0 && document.getElementById("my_modal_3").showModal()}>
             <span className="opacity-80 mr-3">
               Search All Sentiment Here...
             </span>
