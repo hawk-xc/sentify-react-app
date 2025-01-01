@@ -4,11 +4,13 @@ import GaugeChart from "../particles/charts/GaugeChart";
 import axiosClient from "../api/axiosClient";
 import { SentimentSearchModal } from "../particles/Modals";
 import SentimentDetailPages from "./SentimentDetailPages";
+import loadingBasic from '../particles/loading/loadingBasic';
 
 const HomePages = () => {
   const [detailLoading, setDetailLoading] = useState(false);
   const [dashboardData, setDashboardData] = useState([]);
   const [detailSentiment, setDetailSentiment] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   const fetchSentimentDetail = async (sentimentId) => {
     setDetailLoading(true);
@@ -27,6 +29,7 @@ const HomePages = () => {
   };
 
   const fetchDashboardData = async () => {
+    setIsLoading(true);
     try {
       const response = await axiosClient.get("/dashboard");
 
@@ -39,6 +42,7 @@ const HomePages = () => {
       }, []);
 
       setDashboardData({
+        user_information: response.data.data.user,
         sentiment_count: response.data.data.sentimentCount,
         total_comments: response.data.data.totalCommentsLimit,
         total_reactions: response.data.data.totalSentimentStatistics,
@@ -48,6 +52,8 @@ const HomePages = () => {
     } catch (error) {
       console.error("Failed to fetch dashboard data:", error);
     }
+
+    setIsLoading(false);
   };
 
   useEffect(() => {
@@ -56,9 +62,9 @@ const HomePages = () => {
 
   return (
     <div>
-      {detailSentiment ? 
-      <div className='py-5'><SentimentDetailPages handleBackToSentiments={handleBackToSentiments} detailSentiment={detailSentiment} /></div> : 
-      <GlobalHomePage dashboardData={dashboardData} fetchSentimentDetail={fetchSentimentDetail} detailLoading={detailLoading} />}
+      {detailSentiment ?
+        <div className='py-5'><SentimentDetailPages handleBackToSentiments={handleBackToSentiments} detailSentiment={detailSentiment} /></div> :
+        <GlobalHomePage dashboardData={dashboardData} fetchSentimentDetail={fetchSentimentDetail} detailLoading={detailLoading} isLoading={isLoading} loadingBasic={loadingBasic} />}
     </div>
   );
 };
@@ -76,10 +82,10 @@ const GlobalHomePage = (props) => {
 
   return (
     <div className="flex flex-col w-full gap-5 p-5">
-      <SentimentSearchModal dashboardData={props.dashboardData} fetchSentimentDetail={props.fetchSentimentDetail} detailLoading={props.detailLoading}/>
+      <SentimentSearchModal dashboardData={props.dashboardData} fetchSentimentDetail={props.fetchSentimentDetail} detailLoading={props.detailLoading} loadingBasic={loadingBasic} />
       <div className="flex flex-row flex-1 w-full col-span-3 gap-3 align-middle bg-white rounded-lg shadow-sm p-7">
         <div id="GreetingMessage" className="w-full flex flex-col">
-          <h2 className="text-3xl font-semibold">👋 Hi wahyu</h2>
+          <h2 className="text-3xl font-semibold">👋 Hi, Hello {props.dashboardData?.user_information?.username || 'Guest'}</h2>
           <span>Welcome to Sentify</span>
         </div>
         <div id="searchButton" className="w-full flex flex-row justify-end">
@@ -122,14 +128,22 @@ const GlobalHomePage = (props) => {
           </div>
         </div>
       </div>
-      <div className="flex flex-row flex-1 w-full col-span-3 gap-3 align-middle bg-white rounded-lg shadow-sm p-7">
-        <RoundedLineChart data={props.dashboardData.all_sentiment_date || dummyData} className="flex-1" />
-        <GaugeChart data={props.dashboardData.total_reactions || {
-          positive: 1,
-          negative: 1,
-          neutral: 1
-        }} className="flex-1" />
-      </div>
+      {props.dashboardData.all_sentiment_date?.length > 0 ? (
+        <div className="flex flex-row flex-1 w-full col-span-3 gap-3 align-middle bg-white rounded-lg shadow-sm p-7">
+          <RoundedLineChart data={props.dashboardData.all_sentiment_date || dummyData} className="flex-1" />
+          <GaugeChart data={props.dashboardData.total_reactions || {
+            positive: 1,
+            negative: 1,
+            neutral: 1
+          }} className="flex-1" />
+        </div>
+      ) : (
+        <div className="flex flex-row flex-1 w-full col-span-3 gap-3 align-middle bg-white rounded-lg shadow-sm p-16 text-center items-center justify-center">
+          {props.isLoading ? (<props.loadingBasic />) : (
+            <span>your statistic graph shown here</span>
+          )}
+        </div>
+      )}
     </div>
   );
 }

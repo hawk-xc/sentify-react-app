@@ -1,6 +1,6 @@
 export default function EmptyDataPart({ clearTagClick }) {
     return (
-        <div className="w-full flex items-center flex-wrap flex-col justify-center align-middle gap-10 h-full">
+        <div className="w-full flex items-center flex-wrap flex-col justify-center align-middle gap-10 h-full p-16">
             <div className="grid gap-4 w-60">
                 <svg className="mx-auto" xmlns="http://www.w3.org/2000/svg" width="154" height="161" viewBox="0 0 154 161" fill="none">
                     <path d="M0.0616455 84.4268C0.0616455 42.0213 34.435 7.83765 76.6507 7.83765C118.803 7.83765 153.224 42.0055 153.224 84.4268C153.224 102.42 147.026 118.974 136.622 132.034C122.282 150.138 100.367 161 76.6507 161C52.7759 161 30.9882 150.059 16.6633 132.034C6.25961 118.974 0.0616455 102.42 0.0616455 84.4268Z" fill="#EEF2FF" />

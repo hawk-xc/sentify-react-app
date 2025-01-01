@@ -229,9 +229,8 @@ const SentimentList = ({
             <div className="flex flex-row flex-wrap">
               <button
                 onClick={() => handleTagClick(null)}
-                className={`hover:cursor-pointer active:scale-95 duration-150 flex flex-row gap-1 m-1 p-2 rounded-box ${
-                  activeTag === null ? "bg-blue-500 text-white" : "bg-base-200"
-                }`}
+                className={`hover:cursor-pointer active:scale-95 duration-150 flex flex-row gap-1 m-1 p-2 rounded-box ${activeTag === null ? "bg-blue-500 text-white" : "bg-base-200"
+                  }`}
               >
                 🏷️ All
               </button>
@@ -241,17 +240,15 @@ const SentimentList = ({
                   onClick={() =>
                     detailLoading ? null : handleTagClick(tag.unique_id)
                   }
-                  className={`hover:cursor-pointer active:scale-95 duration-150 flex flex-row gap-1 m-1 px-3 py-2 text-sm rounded-box ${
-                    activeTag === tag.unique_id
+                  className={`hover:cursor-pointer active:scale-95 duration-150 flex flex-row gap-1 m-1 px-3 py-2 text-sm rounded-box ${activeTag === tag.unique_id
                       ? "bg-blue-500 text-white"
                       : "bg-base-200"
-                  }`}
+                    }`}
                 >
                   🏷️ {tag.tag_name}
                   <button
-                    className={`rounded-full flex justify-center align-middle items-center opacity-55 hover:opacity-100 z-50 active:scale-105 duration-150 ${
-                      activeTag === tag.unique_id ? "" : "hidden"
-                    } ml-2`}
+                    className={`rounded-full flex justify-center align-middle items-center opacity-55 hover:opacity-100 z-50 active:scale-105 duration-150 ${activeTag === tag.unique_id ? "" : "hidden"
+                      } ml-2`}
                     onClick={() => {
                       setTagId(tag.unique_id);
                       document.getElementById("my_modal_3").showModal();
@@ -271,10 +268,29 @@ const SentimentList = ({
                 <i className="ri-add-fill"></i> New Tag
               </div>
             </div>
+          ) : isLoading ? (
+            <div className="flex w-52 flex-col gap-4">
+              <div className="flex items-center gap-4">
+                <div className="flex flex-wrap gap-2">
+                  <div className="skeleton h-4 w-16"></div>
+                  <div className="skeleton h-4 w-16"></div>
+                  <div className="skeleton h-4 w-16"></div>
+                  <div className="skeleton h-4 w-16"></div>
+                  <div className="skeleton h-4 w-16"></div>
+                  <div className="skeleton h-4 w-16"></div>
+                  <div className="skeleton h-4 w-16"></div>
+                  <div className="skeleton h-4 w-16"></div>
+                </div>
+              </div>
+            </div>
           ) : (
-            <div className="flex flex-col items-center justify-center w-full h-full align-middle">
-              <span className="loading loading-ring loading-lg"></span>
-              Loading...
+            <div
+                className="flex flex-row gap-1 px-3 py-2 m-1 text-sm duration-150 hover:cursor-pointer active:scale-95 rounded-box bg-base-200"
+                onClick={() =>
+                  document.getElementById("my_modal_2").showModal()
+                }
+              >
+                <i className="ri-add-fill"></i> New Tag
             </div>
           )}
         </div>
@@ -301,37 +317,6 @@ const SentimentList = ({
             <SentimentSkeletonLoader />
           ) : sentiment.length > 0 ? (
             <>
-              {message ? (
-                message.step > 1 ? (
-                  <div className="relative flex items-center my-1 duration-150 bg-base-200 rounded-box menu lg:menu-horizontal active:bg-base-300 active:scale-95 disabled">
-                    <li className="w-full justify-between active:bg-base-300 border border-transparent rounded-lg bg-gradient-to-r from-transparent via-blue-300 to-transparent bg-[length:200%_200%] animate-gradient">
-                      <span
-                        className="flex justify-between"
-                        data-tip="Tooltip on hover"
-                      >
-                        <span className="flex flex-row items-center w-full gap-2">
-                          <img
-                            src={getImage(message.message[2])}
-                            className="w-10"
-                            alt=""
-                          />
-                          <span className="text-lg font-normal">
-                            {message.message[3] || "Sentiment Processing"}
-                          </span>
-                        </span>
-                        <span className="flex flex-row items-center justify-center gap-2 align-middle bg-white rounded-lg w-80 text-xs p-2">
-                          {message.message[0]}
-                          <BadgeSelector step={message.step} />
-                        </span>
-                      </span>
-                    </li>
-                  </div>
-                ) : (
-                  ""
-                )
-              ) : (
-                ""
-              )}
               {sentiment.map((item, index) => (
                 <div
                   key={index}
@@ -371,9 +356,38 @@ const SentimentList = ({
                 </div>
               ))}
             </>
-          ) : (
+          ) :
+            message ? (
+              message.step > 1 ? (
+                <div className="relative flex items-center my-1 duration-150 bg-base-200 rounded-box menu lg:menu-horizontal active:bg-base-300 active:scale-95 disabled">
+                  <li className="w-full justify-between active:bg-base-300 border border-transparent rounded-lg bg-gradient-to-r from-transparent via-blue-300 to-transparent bg-[length:200%_200%] animate-gradient">
+                    <span
+                      className="flex justify-between"
+                      data-tip="Tooltip on hover"
+                    >
+                      <span className="flex flex-row items-center w-full gap-2">
+                        <img
+                          src={getImage(message.message[2])}
+                          className="w-10"
+                          alt=""
+                        />
+                        <span className="text-lg font-normal">
+                          {message.message[3] || "Sentiment Processing"}
+                        </span>
+                      </span>
+                      <span className="flex flex-row items-center justify-center gap-2 align-middle bg-white rounded-lg w-80 text-xs p-2">
+                        {message.message[0]}
+                        <BadgeSelector step={message.step} />
+                      </span>
+                    </span>
+                  </li>
+                </div>
+              ) : (
+                ""
+              )
+            ) :
             <EmptyDataPart clearTagClick={clearTagClick} />
-          )}
+          }
         </div>
 
         <div className="flex flex-col col-span-3 gap-3 p-5 bg-white rounded-lg shadow-lg">
@@ -392,6 +406,7 @@ const SentimentList = ({
               {dashboardData.total_comments || 0}
             </h3>
           </div>
+          {dashboardData.length > 0 && (
           <div className="flex flex-col items-center justify-center w-full p-3 align-middle rounded-lg bg-orange-50">
             <div className="flex items-start w-full mb-3">
               <span className="text-sm">All Reactions</span>
@@ -406,6 +421,7 @@ const SentimentList = ({
               }
             />
           </div>
+          )}
         </div>
       </div>
     </div>
