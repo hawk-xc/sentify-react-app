@@ -1,3 +1,5 @@
+import { useState } from 'react';
+import axiosClient from '../api/axiosClient';
 import BarChart from "../particles/charts/KeywordsBarChart";
 import DoughnutChart from "../particles/charts/KeywordsDoughnutChart";
 import tiktokImg from "../assets/images/tiktok.png";
@@ -7,7 +9,30 @@ import googlemapsImg from "../assets/images/googlemaps.png";
 import ExpandableText from '../particles/text/ExpandableText';
 import { DeleteSentimentModal } from "../particles/Modals";
 
-const SentimentDetailPages = ({ detailSentiment, handleBackToSentiments }) => {
+const SentimentDetailPages = ({ detailSentiment, fetchSentiment, handleBackToSentiments }) => {
+  const [sentimentTitle, setSentimentTitle] = useState(detailSentiment.title || detailSentiment.unique_id);
+  const [sentimentTitleUpdated, setSentimentTitleUpdated] = useState(false);
+
+  const changeSentimentTitle = (e) => {
+    setSentimentTitleUpdated(true);
+    setSentimentTitle(e.target.value);
+  };
+
+  const handleUpdateSentimentTitle = async ({ sentimentId }) => {
+    try {
+      const response = axiosClient.put(`/sentiment/${sentimentId}`, {
+        title: sentimentTitle,
+      });
+
+      if ( (await response).status === 200) {
+        setSentimentTitleUpdated(false);
+        fetchSentiment();
+      }
+    } catch (error) {
+      console.error(`error : ${error}`);
+    }
+  } 
+
   const reaction = {
     positive: detailSentiment.statistic.data.positive,
     neutral: detailSentiment.statistic.data.neutral,
@@ -78,12 +103,26 @@ const SentimentDetailPages = ({ detailSentiment, handleBackToSentiments }) => {
       </div>
       <div className="flex flex-col border rounded-lg shadow-sm border-slate-200">
         <div className="flex flex-col p-5">
-          <h1 className="text-2xl">
-            {detailSentiment.title || `Sentiment ${detailSentiment.unique_id}`}
+          <h1 className="text-2xl mb-3">
+            <input type="text" placeholder="sentiment title..." value={sentimentTitle} onChange={(e) => changeSentimentTitle(e)} />
+            {sentimentTitleUpdated &&
+              sentimentTitle !== detailSentiment.title && (
+                <>
+                  {sentimentTitle.length !== 0 && (
+                    <div className="tooltip ml-2 active:scale-95 duration-150" data-tip="save" onClick={() => handleUpdateSentimentTitle({ sentimentId: detailSentiment.unique_id })  }>
+                      <i className="ri-save-line text-blue-400 cursor-pointer"></i>
+                    </div>
+                  )}
+                  <div className="tooltip ml-2 active:scale-95 duration-150" data-tip="cancel" onClick={()  => setSentimentTitle(detailSentiment.title)}>
+                    <i className="ri-reset-left-line text-red-400 cursor-pointer"></i>
+                  </div>
+                </>
+              )
+            }
           </h1>
           <div id="tags" className="flex flex-row gap-2">
             {detailSentiment.tags.map((tag, index) => (
-              <span className="badge badge-md">{tag}</span>
+              <span className="badge badge-md cursor-pointer" key={index}>{tag} <span className="hover:block hidden"><i className="ri-close-line"></i></span></span>
             ))}
           </div>
           <span className="flex flex-col mt-4">

@@ -128,6 +128,7 @@ const SentimentPages = () => {
     <div className="py-5">
       {detailSentiment ? (
         <SentimentDetailPages
+          fetchSentiment={fetchSentiment}
           handleBackToSentiments={handleBackToSentiments}
           detailSentiment={detailSentiment}
         />
