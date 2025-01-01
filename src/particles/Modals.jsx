@@ -450,7 +450,7 @@ export const SentimentSearchModal = (props) => {
     if (filteredSentiments.length > 0) {
       setEmptyData(false);
       setSentimentData(filteredSentiments);
-      console.log(filteredSentiments)
+      // console.log(filteredSentiments)
     } else {
       setEmptyData(true);
       setSentimentData([]);

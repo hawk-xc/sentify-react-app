@@ -12,7 +12,7 @@ const DashboardPages = () => {
   });
 
   useEffect(() => {
-    console.log("Saving to localStorage:", page);
+    // console.log("Saving to localStorage:", page);
     localStorage.setItem("currentPage", page);
   }, [page]);
 
