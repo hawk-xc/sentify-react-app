@@ -406,7 +406,6 @@ const SentimentList = ({
               {dashboardData.total_comments || 0}
             </h3>
           </div>
-          {dashboardData.length > 0 && (
           <div className="flex flex-col items-center justify-center w-full p-3 align-middle rounded-lg bg-orange-50">
             <div className="flex items-start w-full mb-3">
               <span className="text-sm">All Reactions</span>
@@ -421,7 +420,6 @@ const SentimentList = ({
               }
             />
           </div>
-          )}
         </div>
       </div>
     </div>

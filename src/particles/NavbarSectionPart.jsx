@@ -62,7 +62,7 @@ const NavbarSectionPart = ({ pages, setPage, page }) => {
           </div>
           <ul tabIndex="0" className="dropdown-content menu bg-base-100 rounded-box z-[1] w-36 p-2 shadow">
             <li>
-              <a>Profile</a>
+              <a onClick={() => setPage('profile')}>Profile</a>
             </li>
             <li>
               <a onClick={handleLogout}>Logout</a>

@@ -177,7 +177,7 @@ const SentimentDetailPages = ({ detailSentiment, fetchSentiment, handleBackToSen
             </div>
             <div className="flex flex-col gap-2">
               <span className="font-semibold text-blue-400">
-                Limit Total <i class="ri-arrow-down-s-line"></i>
+                Limit Total <i className="ri-arrow-down-s-line"></i>
               </span>
               <span className="flex flex-row items-center justify-center gap-2 p-4 align-middle badge border-slate-200">
                 💬 {detailSentiment.comments_limit}
@@ -185,7 +185,7 @@ const SentimentDetailPages = ({ detailSentiment, fetchSentiment, handleBackToSen
             </div>
             <div className="flex flex-col gap-2">
               <span className="font-semibold text-blue-400">
-                Created At <i class="ri-arrow-down-s-line"></i>
+                Created At <i className="ri-arrow-down-s-line"></i>
               </span>
               <span className="flex flex-row items-center justify-center gap-2 p-4 align-middle badge border-slate-200">
                 ⏲️ {timeAgo(detailSentiment.sentiment_created_at)}
