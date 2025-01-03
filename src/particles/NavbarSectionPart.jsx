@@ -33,15 +33,56 @@ const NavbarSectionPart = ({ pages, setPage, page }) => {
     fetchUser();
 
     return () => {
-      isMounted = false; // Cleanup effect jika component di-unmount
+      isMounted = false;
     };
   }, []);
 
   return (
-    <div className="shadow-md navbar bg-base-100 md:px-56 max-sm:px-5">
-      <div className="navbar-start">
-        <span className="text-2xl font-extrabold">😍Sentify</span>
+    <div className="shadow-md navbar bg-base-100 md:px-56 max-sm:px-5 max-sm:flex max-sm:flex-row max-sm:justify-between">
+      <div className="dropdown md:hidden">
+        <div tabIndex={0} role="button" className="btn btn-ghost btn-circle">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className="h-5 w-5"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor">
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
+              d="M4 6h16M4 12h16M4 18h7" />
+          </svg>
+        </div>
+        <ul
+          tabIndex={0}
+          className="menu menu-md dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow">
+          {pages.map((pageItem) => (
+            <li
+              key={pageItem}
+              className={`${pageItem === page ? "" : "text-slate-500"}`}
+            >
+              <a className="text-xl" onClick={() => setPage(pageItem)}>{pageItem}</a>
+            </li>
+          ))}
+          <div className="divider my-0"></div>
+          <li>
+            <a className="text-xl" onClick={() => setPage('profile')}>Profile</a>
+          </li>
+          <li>
+            <a className="text-xl" onClick={handleLogout}>Logout</a>
+          </li>
+        </ul>
       </div>
+      
+      <div className="md:navbar-start">
+        <span className="text-2xl font-extrabold">😍 Sentify</span>
+      </div>
+
+      <div className="md:hidden active:scale-95 duration-150">
+        <i className="ri-search-2-line text-xl p-2"></i>
+      </div>
+
       <div className="hidden navbar-center lg:flex">
         <ul className="px-1 text-lg menu menu-horizontal">
           {pages.map((pageItem) => (
@@ -54,7 +95,7 @@ const NavbarSectionPart = ({ pages, setPage, page }) => {
           ))}
         </ul>
       </div>
-      <div className="flex items-center gap-2 navbar-end">
+      <div className="flex items-center gap-2 navbar-end max-sm:hidden">
         <div className="dropdown">
           <div tabIndex="0" role="button" className="flex flex-row items-center gap-3">
             <span>Hi, {user?.data[0]?.username || "Guest"}</span>

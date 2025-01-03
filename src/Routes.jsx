@@ -1,10 +1,10 @@
 import { RouterProvider, createBrowserRouter, Navigate } from "react-router-dom";
 import { useAuth } from "./context/AuthProvider.jsx";
 import { PrivateRoute } from "./components/PrivateRoute.jsx";
-import LoginPage from "./pages/loginPages";
-import RegisterPage from "./pages/registerPages.jsx";
+import LoginPage from "./pages/LoginPages";
+import RegisterPage from "./pages/RegisterPages.jsx";
 import NotFoundPages from "./pages/NotFoundPages.jsx";
-import DashboardPages from "./pages/dashboardPages.jsx";
+import DashboardPages from "./pages/DashboardPages.jsx";
 
 // Buat komponen fallback untuk Hydration
 function HydrateFallback() {

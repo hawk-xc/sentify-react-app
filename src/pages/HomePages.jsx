@@ -81,25 +81,51 @@ const GlobalHomePage = (props) => {
   ];
 
   return (
-    <div className="flex flex-col w-full gap-5 p-5">
+    <div className="flex flex-col w-full gap-5 md:p-5">
       <SentimentSearchModal dashboardData={props.dashboardData} fetchSentimentDetail={props.fetchSentimentDetail} detailLoading={props.detailLoading} loadingBasic={loadingBasic} />
-      <div className="flex flex-row flex-1 w-full col-span-3 gap-3 align-middle bg-white rounded-lg shadow-sm p-7">
+      <div className="flex md:flex-row max-sm:flex-col flex-1 w-full col-span-3 gap-3 align-middle bg-white rounded-lg shadow-sm p-7">
         <div id="GreetingMessage" className="w-full flex flex-col">
           <h2 className="text-3xl font-semibold">👋 Hi, Hello {props.dashboardData?.user_information?.username || 'Guest'}</h2>
           <span>Welcome to Sentify</span>
         </div>
-        <div id="searchButton" className="w-full flex flex-row justify-end">
-          <button className="btn flex font-normal flex-row border border-slate-200" onClick={() => props.dashboardData.sentiment_data.length > 0 && document.getElementById("my_modal_3").showModal()}>
+        <div className="my-3 md:hidden">
+          <RoundedLineChart data={props.dashboardData.all_sentiment_date || dummyData} className="flex-1" />
+        </div>
+        <div id="searchButton" className="w-full flex flex-row justify-end max-sm:hidden">
+          <button className="btn flex font-normal flex-row border border-slate-200 max-sm:w-full max-sm:mt-5" onClick={() => props.dashboardData.sentiment_data.length > 0 && document.getElementById("my_modal_3").showModal()}>
             <span className="opacity-80 mr-3">
               Search All Sentiment Here...
             </span>
-            <kbd className="kbd kbd-sm bg-slate-100">⌘</kbd>
-            <kbd className="kbd kbd-sm bg-slate-100">K</kbd>
+            <kbd className="max-sm:hidden kbd kbd-sm bg-slate-100">⌘</kbd>
+            <kbd className="max-sm:hidden kbd kbd-sm bg-slate-100">K</kbd>
           </button>
         </div>
       </div>
 
-      <div className="flex flex-row justify-between w-full gap-5">
+      <div className="stats shadow flex md:hidden">
+        <div className="stat place-items-center flex-1">
+          <div className="stat-title">Total Sentiment</div>
+          <div className="stat-value">
+            {props.dashboardData.sentiment_count && props.dashboardData.sentiment_count || 0}
+          </div>
+        </div>
+
+        <div className="stat place-items-center flex-1">
+          <div className="stat-title">Total Reactions</div>
+          <div className="stat-value text-secondary">
+            {props.dashboardData.total_reactions && Object.values(props.dashboardData.total_reactions).reduce((acc, curr) => acc + curr, 0) || 0}
+          </div>
+        </div>
+
+        <div className="stat place-items-center flex-1 p-2">
+          <div className="stat-title">Total Comments</div>
+          <div className="stat-value">
+            {props.dashboardData.total_comments && props.dashboardData.total_comments || 0}
+          </div>
+        </div>
+      </div>
+
+      <div className="flex flex-row justify-between w-full gap-5 overflow-scroll max-sm:hidden">
         <div className="flex flex-row flex-1 col-span-3 gap-3 align-middle bg-white rounded-lg shadow-sm p-7 w-96">
           <i className="flex items-center justify-center text-2xl align-middle rounded-full w-14 h-14 ri-chat-smile-3-line bg-sky-100 aspect-square"></i>
           <div className="opacity-80">
@@ -129,7 +155,7 @@ const GlobalHomePage = (props) => {
         </div>
       </div>
       {props.dashboardData.all_sentiment_date?.length > 0 ? (
-        <div className="flex flex-row flex-1 w-full col-span-3 gap-3 align-middle bg-white rounded-lg shadow-sm p-7">
+        <div className="flex md:flex-row max-sm:flex-col max-sm:justify-center max-sm:items-center flex-1 w-full col-span-3 gap-3 align-middle bg-white rounded-lg shadow-sm p-7 max-sm:hidden">
           <RoundedLineChart data={props.dashboardData.all_sentiment_date || dummyData} className="flex-1" />
           <GaugeChart data={props.dashboardData.total_reactions || {
             positive: 1,

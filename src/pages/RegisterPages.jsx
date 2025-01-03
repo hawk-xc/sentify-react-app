@@ -52,8 +52,8 @@ export default function RegisterPage() {
     }
 
     return (
-        <div className="flex flex-row flex-wrap items-center h-screen font-sans max-sm:w-screen justify-evenly bg-slate-100">
-            <div className="flex justify-center align-middle bg-white shadow-2xl card">
+        <div className="flex flex-row flex-wrap items-center h-screen font-sans max-sm:w-screen justify-evenly bg-slate-100 max-sm:p-6">
+            <div className="flex justify-center align-middle bg-white shadow-2xl card max-sm:w-full">
                 <div className="card-body">
                     <dialog id="my_modal_3" className="modal">
                         <div className="modal-box">
@@ -144,7 +144,7 @@ export default function RegisterPage() {
                                 <button
                                     type="button"
                                     onClick={() => setShowPassword((prev) => !prev)}
-                                    className="z-50 border rounded-md btn-xs active:bg-slate-100"
+                                    className="z-50 border rounded-md btn-xs active:bg-slate-100 max-sm:-translate-x-24"
                                 >
                                     {showPassword ? "Hide" : "Show"}
                                 </button>

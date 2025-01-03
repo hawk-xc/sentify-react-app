@@ -221,7 +221,7 @@ const SentimentList = ({
         setActiveTag={setActiveTag}
       />
       <div className="grid grid-cols-12 gap-5">
-        <div className="flex flex-col col-span-3 p-5 bg-white rounded-lg shadow-lg">
+        <div className="flex flex-col col-span-3 p-5 bg-white rounded-lg shadow-lg max-sm:hidden">
           <h2 className="mb-3 text-3xl font-extrabold opacity-85">
             🏷️ My Tags
           </h2>
@@ -295,14 +295,14 @@ const SentimentList = ({
           )}
         </div>
 
-        <div className="flex flex-col col-span-6 p-5 bg-white rounded-lg shadow-lg">
+        <div className="flex flex-col md:col-span-6 max-sm:col-span-12 p-5 bg-white rounded-lg shadow-lg">
           <div className="flex flex-row items-center justify-between">
             <h2 className="mb-3 text-3xl font-extrabold opacity-85">
               😃 My Sentiment
             </h2>
             {sentiment.length > 0 && (
               <button
-                className="mb-3 shadow-md rounded-xl btn bg-sky-100 hover:bg-sky-200"
+                className="max-sm:hidden mb-3 shadow-md rounded-xl btn bg-sky-100 hover:bg-sky-200"
                 onClick={() =>
                   document.getElementById("my_modal_1").showModal()
                 }
@@ -390,7 +390,7 @@ const SentimentList = ({
           }
         </div>
 
-        <div className="flex flex-col col-span-3 gap-3 p-5 bg-white rounded-lg shadow-lg">
+        <div className="flex flex-col col-span-3 gap-3 p-5 bg-white rounded-lg shadow-lg max-sm:hidden">
           <h2 className="mb-3 text-3xl font-extrabold opacity-85">
             🔎 Statistic
           </h2>

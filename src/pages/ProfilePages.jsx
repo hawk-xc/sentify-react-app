@@ -73,19 +73,20 @@ const ProfilePages = ({ setPage }) => {
 
     return (
         <div className="p-5 bg-white rounded-lg shadow-lg m-5">
-            <div className="flex flex-row justify-between w-full items-center mb-3">
+            <div className="flex flex-row justify-between w-full items-center align-middle mb-3">
                 <button
                     onClick={() => setPage('dashboard')}
-                    className="mb-3 bg-gray-200 btn hover:bg-gray-300"
+                    className="mb-3 md:bg-gray-200 md:btn md:hover:bg-gray-300"
                 >
-                    <i className="ri-arrow-left-s-line"></i> Back to Dashboard
+                    <span className="max-sm:hidden"><i className="ri-arrow-left-s-line"></i> Back to Dashboard</span>
+                    <i className="ri-arrow-left-line text-2xl opacity-80 md:hidden"></i>
                 </button>
                 <span className="text-xl">Profile Pages</span>
                 <button
                     onClick={() => setPage('dashboard')}
                     className="mb-3 bg-gray-200 btn hover:bg-gray-300 opacity-0"
                 >
-                    <i className="ri-arrow-left-s-line"></i> Back to Dashboard
+                    <span className="max-sm:hidden"><i className="ri-arrow-left-s-line"></i> Back to Dashboard</span>
                 </button>
             </div>
             <div className="flex flex-col rounded-lg shadow-sm p-5 w-full gap-3">
