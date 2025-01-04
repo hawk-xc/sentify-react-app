@@ -63,8 +63,11 @@ const HomePages = () => {
   return (
     <div>
       {detailSentiment ?
-        <div className='py-5'><SentimentDetailPages handleBackToSentiments={handleBackToSentiments} detailSentiment={detailSentiment} /></div> :
-        <GlobalHomePage dashboardData={dashboardData} fetchSentimentDetail={fetchSentimentDetail} detailLoading={detailLoading} isLoading={isLoading} loadingBasic={loadingBasic} />}
+        <div className='py-5'>
+          <SentimentDetailPages handleBackToSentiments={handleBackToSentiments} detailSentiment={detailSentiment} />
+        </div> :
+        <GlobalHomePage dashboardData={dashboardData} fetchSentimentDetail={fetchSentimentDetail} detailLoading={detailLoading} isLoading={isLoading} loadingBasic={loadingBasic} />
+      }
     </div>
   );
 };
