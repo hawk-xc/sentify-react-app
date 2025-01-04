@@ -8,7 +8,6 @@ import SentimentDetailPages from "./SentimentDetailPages";
 import SentimentSkeletonLoader from "../particles/loading/SentimentSkeletonLoader";
 import LoadingBasic from "../particles/loading/loadingBasic";
 import DashboardReactionChart from "../particles/charts/DashboardReactionChart";
-import { useSentiment } from '../context/SentimentContext';
 import {
   CreateTagModal,
   CreateSentimentModal,
@@ -17,8 +16,6 @@ import {
 import EmptyDataPart from "../particles/EmptyDataPart";
 
 const SentimentPages = () => {
-  const { sentimentData, loading, error } = useSentiment();
-  // console.log(sentimentData.data);
   const [tags, setTags] = useState([]);
   const [sentiment, setSentiment] = useState([]);
   const [activeTag, setActiveTag] = useState(null);
@@ -44,14 +41,13 @@ const SentimentPages = () => {
   const fetchSentiment = async (tagId = null) => {
     setIsLoading(true);
     try {
-      if (tagId) {
-        const response = await axiosClient.get(`/tags/${tagId}`);
-        setSentiment(response.data.data);
-      } else {
-        setSentiment(sentimentData.data);
-      }
+      const response = await axiosClient.get(
+        tagId ? `/tags/${tagId}` : "/sentiment"
+      );
+      setSentiment(response.data.data);
     } catch (error) {
       setSentiment([]);
+      // console.error("Failed to fetch sentiment:", error);
     } finally {
       setIsLoading(false);
     }
@@ -85,7 +81,7 @@ const SentimentPages = () => {
     fetchTags();
     fetchSentiment();
     fetchDashboardData();
-  }, [sentimentData]);
+  }, []);
 
   useEffect(() => {
     if (message?.step === 6) {
