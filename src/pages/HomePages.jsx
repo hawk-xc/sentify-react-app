@@ -155,14 +155,23 @@ const GlobalHomePage = (props) => {
         </div>
       </div>
       {props.dashboardData.all_sentiment_date?.length > 0 ? (
-        <div className="flex md:flex-row max-sm:flex-col max-sm:justify-center max-sm:items-center flex-1 w-full col-span-3 gap-3 align-middle bg-white rounded-lg shadow-sm p-7 max-sm:hidden">
-          <RoundedLineChart data={props.dashboardData.all_sentiment_date || dummyData} className="flex-1" />
-          <GaugeChart data={props.dashboardData.total_reactions || {
-            positive: 1,
-            negative: 1,
-            neutral: 1
-          }} className="flex-1" />
-        </div>
+        <>
+          <div className="flex md:hidden max-sm:flex-col max-sm:justify-center max-sm:items-center flex-1 w-full col-span-3 gap-3 align-middle bg-white rounded-lg shadow-sm p-7">
+            <GaugeChart data={props.dashboardData.total_reactions || {
+              positive: 1,
+              negative: 1,
+              neutral: 1
+            }} className="flex-1" />
+          </div>
+          <div className="max-sm:hidden flex md:flex-row max-sm:flex-col max-sm:justify-center max-sm:items-center flex-1 w-full col-span-3 gap-3 align-middle bg-white rounded-lg shadow-sm p-7">
+            <RoundedLineChart data={props.dashboardData.all_sentiment_date || dummyData} className="flex-1" />
+            <GaugeChart data={props.dashboardData.total_reactions || {
+              positive: 1,
+              negative: 1,
+              neutral: 1
+            }} className="flex-1" />
+          </div>
+        </>
       ) : (
         <div className="flex flex-row flex-1 w-full col-span-3 gap-3 align-middle bg-white rounded-lg shadow-sm p-16 text-center items-center justify-center">
           {props.isLoading ? (<props.loadingBasic />) : (

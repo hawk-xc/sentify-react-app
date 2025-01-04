@@ -1,10 +1,13 @@
 import AuthProvider from "./context/AuthProvider";
+import { SentimentProvider } from "./context/SentimentContext";
 import Routes from "./Routes";
 
 function App() {
   return (
     <AuthProvider>
-      <Routes />
+      <SentimentProvider>
+        <Routes />
+      </SentimentProvider>
     </AuthProvider>
   );
 }

@@ -24,14 +24,14 @@ const SentimentDetailPages = ({ detailSentiment, fetchSentiment, handleBackToSen
         title: sentimentTitle,
       });
 
-      if ( (await response).status === 200) {
+      if ((await response).status === 200) {
         setSentimentTitleUpdated(false);
         fetchSentiment();
       }
     } catch (error) {
       console.error(`error : ${error}`);
     }
-  } 
+  }
 
   const reaction = {
     positive: detailSentiment.statistic.data.positive,
@@ -87,33 +87,39 @@ const SentimentDetailPages = ({ detailSentiment, fetchSentiment, handleBackToSen
   return (
     <div className="p-5 bg-white rounded-lg shadow-lg">
       <DeleteSentimentModal sentimentId={detailSentiment.unique_id} />
-      <div className="flex flex-row justify-between w-full">
+      <div className="flex flex-row justify-between w-full max-sm:mb-4">
         <button
           onClick={handleBackToSentiments}
-          className="mb-3 bg-gray-200 btn hover:bg-gray-300"
+          className="mb-3 bg-gray-200 btn hover:bg-gray-300 max-sm:hidden"
         >
           <i className="ri-arrow-left-s-line"></i> Back to Sentiments
         </button>
         <button
-          className="mb-3 bg-red-200 btn hover:bg-red-300"
+          className="mb-3 bg-red-200 btn hover:bg-red-300 max-sm:hidden"
           onClick={() => document.getElementById("my_modal_2").showModal()}
         >
           <i className="ri-delete-bin-line"></i> Delete
         </button>
+        <button className="md:hidden btn text-xl" onClick={handleBackToSentiments}>
+          <i className="ri-arrow-left-line"></i>
+        </button>
+        <button className="md:hidden btn bg-red-200 text-xl" onClick={() => document.getElementById("my_modal_2").showModal()}>
+          <i className="ri-delete-bin-line"></i>
+        </button>
       </div>
       <div className="flex flex-col border rounded-lg shadow-sm border-slate-200">
         <div className="flex flex-col p-5">
-          <h1 className="text-2xl mb-3">
-            <input type="text" placeholder="sentiment title..." value={sentimentTitle} onChange={(e) => changeSentimentTitle(e)} />
+          <h1 className="text-2xl mb-3 max-sm:flex max-sm:flex-row">
+            <input type="text" className="max-sm:w-64" placeholder="sentiment title..." value={sentimentTitle} onChange={(e) => changeSentimentTitle(e)} />
             {sentimentTitleUpdated &&
               sentimentTitle !== detailSentiment.title && (
                 <>
                   {sentimentTitle.length !== 0 && (
-                    <div className="tooltip ml-2 active:scale-95 duration-150" data-tip="save" onClick={() => handleUpdateSentimentTitle({ sentimentId: detailSentiment.unique_id })  }>
+                    <div className="tooltip ml-2 active:scale-95 duration-150" data-tip="save" onClick={() => handleUpdateSentimentTitle({ sentimentId: detailSentiment.unique_id })}>
                       <i className="ri-save-line text-blue-400 cursor-pointer"></i>
                     </div>
                   )}
-                  <div className="tooltip ml-2 active:scale-95 duration-150" data-tip="cancel" onClick={()  => setSentimentTitle(detailSentiment.title)}>
+                  <div className="tooltip ml-2 active:scale-95 duration-150" data-tip="cancel" onClick={() => setSentimentTitle(detailSentiment.title)}>
                     <i className="ri-reset-left-line text-red-400 cursor-pointer"></i>
                   </div>
                 </>
@@ -141,7 +147,7 @@ const SentimentDetailPages = ({ detailSentiment, fetchSentiment, handleBackToSen
         </div>
         <hr className="w-full border" />
         <div className="flex flex-row justify-between p-5">
-          <div className="flex flex-row justify-between w-full">
+          <div className="flex flex-row md:justify-between max-sm:justify-start w-full flex-wrap max-sm:gap-2">
             <div className="flex flex-col gap-2">
               <span className="font-semibold text-blue-400">
                 Status <i className="ri-arrow-down-s-line"></i>
@@ -199,7 +205,7 @@ const SentimentDetailPages = ({ detailSentiment, fetchSentiment, handleBackToSen
         <span className="">{detailSentiment.statistic.data.resume}</span>
       </div>
       <div className="flex flex-row gap-2 p-5 mt-3 border rounded-lg shadow-sm border-slate-200">
-        <div className="flex flex-row flex-wrap w-full justify-evenly">
+        <div className="flex flex-row flex-wrap w-full justify-evenly max-sm:gap-14">
           <div>
             <h1 className="text-xl">Positive Keywords</h1>
             <BarChart
@@ -239,7 +245,7 @@ const SentimentDetailPages = ({ detailSentiment, fetchSentiment, handleBackToSen
           </div>
         </div>
       </div>
-      <div className="flex flex-row gap-2 p-5 mt-3 border rounded-lg shadow-sm border-slate-200">
+      <div className="flex md:flex-row max-sm:flex-col gap-2 p-5 mt-3 border rounded-lg shadow-sm border-slate-200">
         <h2 className="text-xl">Reaction</h2>
         <div className="flex flex-row flex-wrap items-center justify-center w-full p-5 align-middle">
           <div className="flex-1">
@@ -251,8 +257,8 @@ const SentimentDetailPages = ({ detailSentiment, fetchSentiment, handleBackToSen
               }}
             />
           </div>
-          <div className="flex flex-col justify-center flex-1 px-10 align-middle gap-7">
-            <div className="flex flex-col">
+          <div className="flex flex-col justify-center flex-1 px-10 align-middle gap-7 max-sm:hidden">
+            <div className="flex flex-col ">
               <span className="text-lg">Top Positive Reaction</span>
               {detailSentiment.statistic.data.topstatus.positive.length > 0
                 ? detailSentiment.statistic.data.topstatus.positive.map(
@@ -352,10 +358,110 @@ const SentimentDetailPages = ({ detailSentiment, fetchSentiment, handleBackToSen
             </div>
           </div>
         </div>
+        <div className="mt-2 md:hidden">
+          <h2 className="text-xl">Top Positive Reaction</h2>
+          <div className="flex flex-col">
+            {detailSentiment.statistic.data.topstatus.positive.length > 0
+              ? detailSentiment.statistic.data.topstatus.positive.map(
+                (item, index) => (
+                  <div
+                    key={index}
+                    className="flex flex-col p-2 my-1 border rounded-lg shadow-md border-slate-100 active:shadow-md hover:shadow-lg duration-150 transition-all hover:cursor-pointer"
+                  >
+                    <div className="flex flex-row justify-between">
+                      <span className="font-semibold">
+                        {item.username[0] == '@' ? item.username : '@' + item.username}
+                      </span>
+                      <span className="text-xs text-slate-500">
+                        {detailSentiment.comments.filter(
+                          (sentiment) =>
+                            sentiment.username === item.username
+                        )[0].createdAt && timeAgo(
+                          detailSentiment.comments.filter(
+                            (sentiment) =>
+                              sentiment.username === item.username
+                          )[0].createdAt
+                        )
+                        }
+                      </span>
+                    </div>
+                    <span className="mb-3">
+                      <ExpandableText text={item.text} maxWords={20} />
+                    </span>
+                    {detailSentiment.comments.filter(
+                      (sentiment) => sentiment.username === item.username
+                    )[0].likes > 0 ? (
+                      <div className="block mt-3">
+                        👍{" "}
+                        {
+                          detailSentiment.comments.filter(
+                            (sentiment) =>
+                              sentiment.username === item.username
+                          )[0].likes
+                        }
+                      </div>
+                    ) : (
+                      <div className="block mt-3">👍 0</div>
+                    )}
+                  </div>
+                )
+              )
+              : "No Positive Reaction"}
+          </div>
+          <h2 className="text-xl mt-7">Top Negative Reaction</h2>
+          <div className="flex flex-col">
+            {detailSentiment.statistic.data.topstatus.negative.length > 0
+              ? detailSentiment.statistic.data.topstatus.negative.map(
+                (item, index) => (
+                  <div
+                    key={index}
+                    className="flex flex-col p-2 my-1 border rounded-lg shadow-md border-slate-100 active:shadow-md hover:shadow-lg duration-150 transition-all hover:cursor-pointer"
+                  >
+                    <div className="flex flex-row justify-between">
+                      <span className="font-semibold">
+                        {item.username[0] == '@' ? item.username : '@' + item.username}
+                      </span>
+                      <span className="text-xs text-slate-500">
+                        {detailSentiment.comments.filter(
+                          (sentiment) =>
+                            sentiment.username === item.username
+                        )[0].createdAt && timeAgo(
+                          detailSentiment.comments.filter(
+                            (sentiment) =>
+                              sentiment.username === item.username
+                          )[0].createdAt
+                        )
+                        }
+                      </span>
+                    </div>
+                    <span className="mb-3">
+                      <ExpandableText text={item.text} maxWords={20} />
+                    </span>
+                    {detailSentiment.comments.filter(
+                      (sentiment) => sentiment.username === item.username
+                    )[0].likes > 0 ? (
+                      <div className="block mt-3">
+                        👍{" "}
+                        {
+                          detailSentiment.comments.filter(
+                            (sentiment) =>
+                              sentiment.username === item.username
+                          )[0].likes
+                        }
+                      </div>
+                    ) : (
+                      <div className="block mt-3">👍 0</div>
+                    )}
+                  </div>
+                )
+              )
+              : "No Negative Reaction"}
+          </div>
+        </div>
       </div>
       {detailSentiment.statistic.data.assistances.length > 0 ? (<div className="flex flex-col gap-2 p-5 mt-3 border rounded-lg shadow-sm border-slate-200">
         <h1 className="text-xl">Assistance</h1>
-        <div className="flex flex-row flex-wrap items-center w-full gap-3 p-5 align-middle">
+        <div className="flex md:flex-row max-sm:flex-col flex-wrap md:items-center w-full md:gap-3 md:p-5 align-middle">
           {detailSentiment.statistic.data.assistances.map((item, index) => (
             <div
               key={index}
@@ -402,7 +508,7 @@ const SentimentDetailPages = ({ detailSentiment, fetchSentiment, handleBackToSen
       ) : ""}
       {detailSentiment.statistic.data.questions.length > 0 ? (<div className="flex flex-col gap-2 p-5 mt-3 border rounded-lg shadow-sm border-slate-200">
         <h1 className="text-xl">Questions</h1>
-        <div className="flex flex-row flex-wrap items-center w-full gap-3 p-5 align-middle">
+        <div className="flex md:flex-row max-sm:flex-col flex-wrap md:items-center w-full md:gap-3 md:p-5 align-middle">
           {detailSentiment.statistic.data.questions.map((item, index) => (
             <div
               key={index}
