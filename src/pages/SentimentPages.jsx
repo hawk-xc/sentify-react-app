@@ -326,19 +326,20 @@ const SentimentList = ({
               </>
             )}
           </div>
-          <div className="md:hidden flex gap-2 overflow-x-scroll mb-4 p-5 border border-opacity-50 rounded-lg">
-            <span key="addNewTag" className="badge bg-sky-100" onClick={() =>
+          <div className="md:hidden flex gap-2 overflow-x-scroll mb-4 p-5 border border-opacity-50 rounded-lg flex-row flex-nowrap items-baseline text-sm">
+            <span key="addNewTag" className="inline-flex px-4 py-2 items-center rounded-xl cursor-pointer bg-sky-100" onClick={() =>
                   document.getElementById("my_modal_2").showModal()
                 }>
               new <i className="ri-add-line"></i>
             </span>
             <span key="allTag" className={`
-            badge ${activeTag === null ? "bg-blue-500 text-white" : "bg-base-200"}
+            inline-flex px-4 py-2 items-center rounded-xl cursor-pointer ${activeTag === null ? "bg-blue-500 text-white" : "bg-base-200"}
               `} onClick={() => handleTagClick(null)}>
               all
             </span>
+            
             {tags.map((tag, index) => (
-              <span key={index} className={`badge badge-lg ${activeTag === tag.unique_id
+              <span key={index} className={`rounded-xl inline-flex px-4 py-2 items-center cursor-pointer ${activeTag === tag.unique_id
                 ? "bg-blue-500 text-white"
                 : "bg-base-200"
                 }`} onClick={() =>

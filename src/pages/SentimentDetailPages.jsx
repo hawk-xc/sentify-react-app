@@ -147,7 +147,7 @@ const SentimentDetailPages = ({ detailSentiment, fetchSentiment, handleBackToSen
         </div>
         <hr className="w-full border" />
         <div className="flex flex-row justify-between p-5">
-          <div className="flex flex-row md:justify-between max-sm:justify-start w-full flex-wrap max-sm:gap-2">
+          <div className="flex flex-row justify-between w-full flex-wrap max-sm:gap-2">
             <div className="flex flex-col gap-2">
               <span className="font-semibold text-blue-400">
                 Status <i className="ri-arrow-down-s-line"></i>

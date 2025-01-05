@@ -134,7 +134,7 @@ export default function RegisterPage() {
                                 <span id="keyEmoji">🔑</span>
                                 <input
                                     type={showPassword ? "text" : "password"}
-                                    className="grow"
+                                    className="grow max-sm:w-40"
                                     placeholder="Enter password"
                                     value={password}
                                     onChange={(e) => setPassword(e.target.value)}
@@ -144,7 +144,7 @@ export default function RegisterPage() {
                                 <button
                                     type="button"
                                     onClick={() => setShowPassword((prev) => !prev)}
-                                    className="z-50 border rounded-md btn-xs active:bg-slate-100 max-sm:-translate-x-24"
+                                    className="z-50 border rounded-md btn-xs active:bg-slate-100"
                                 >
                                     {showPassword ? "Hide" : "Show"}
                                 </button>
