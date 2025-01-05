@@ -207,6 +207,7 @@ const SentimentList = ({
         return <span className="badge badge-xs badge-error"></span>;
     }
   };
+  
   return (
     <div>
       <CreateSentimentModal
@@ -353,6 +354,35 @@ const SentimentList = ({
             <SentimentSkeletonLoader />
           ) : sentiment.length > 0 ? (
             <>
+            {message ? (
+              message.step > 1 ? (
+                <div className="relative flex items-center my-1 duration-150 bg-base-200 rounded-box menu lg:menu-horizontal active:bg-base-300 active:scale-95 disabled">
+                  <li className="w-full justify-between active:bg-base-300 border border-transparent rounded-lg bg-gradient-to-r from-transparent via-blue-300 to-transparent bg-[length:200%_200%] animate-gradient">
+                    <span
+                      className="flex justify-between"
+                      data-tip="Tooltip on hover"
+                    >
+                      <span className="flex flex-row items-center w-full gap-2">
+                        <img
+                          src={getImage(message.message[2])}
+                          className="w-10"
+                          alt=""
+                        />
+                        <span className="text-lg font-normal">
+                          {message.message[3] || "Sentiment Processing"}
+                        </span>
+                      </span>
+                      <span className="flex flex-row items-center justify-center gap-2 align-middle bg-white rounded-lg w-80 text-xs p-2">
+                        {message.message[0]}
+                        <BadgeSelector step={message.step} />
+                      </span>
+                    </span>
+                  </li>
+                </div>
+              ) : (
+                ""
+              )
+            ) : null}
               {sentiment.map((item, index) => (
                 <div
                   key={index}

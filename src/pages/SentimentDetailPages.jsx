@@ -96,7 +96,7 @@ const SentimentDetailPages = ({ detailSentiment, fetchSentiment, handleBackToSen
         </button>
         <button
           className="mb-3 bg-red-200 btn hover:bg-red-300 max-sm:hidden"
-          onClick={() => document.getElementById("my_modal_10").showModal()}
+          onClick={() => document.getElementById("my_modal_2").showModal()}
         >
           <i className="ri-delete-bin-line"></i> Delete
         </button>
