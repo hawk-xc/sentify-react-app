@@ -8,6 +8,7 @@ import SentimentDetailPages from "./SentimentDetailPages";
 import SentimentSkeletonLoader from "../particles/loading/SentimentSkeletonLoader";
 import LoadingBasic from "../particles/loading/loadingBasic";
 import DashboardReactionChart from "../particles/charts/DashboardReactionChart";
+import { SentimentSearchModal } from "../particles/Modals";
 import {
   CreateTagModal,
   CreateSentimentModal,
@@ -155,6 +156,7 @@ const SentimentPages = () => {
           processUpdates={processUpdates}
           setProcessUpdates={setProcessUpdates}
           setMessage={setMessage}
+          SentimentSearchModal={SentimentSearchModal}
           message={message}
         />
       )}
@@ -184,6 +186,7 @@ const SentimentList = ({
   processUpdates,
   setProcessUpdates,
   setMessage,
+  SentimentSearchModal,
   message,
 }) => {
   const BadgeSelector = ({ step }) => {
@@ -204,7 +207,6 @@ const SentimentList = ({
         return <span className="badge badge-xs badge-error"></span>;
     }
   };
-
   return (
     <div>
       <CreateSentimentModal
@@ -220,6 +222,7 @@ const SentimentList = ({
         fetchSentiment={fetchSentiment}
         setActiveTag={setActiveTag}
       />
+      <SentimentSearchModal dashboardData={sentiment} fetchSentimentDetail={handleSentimentClick} detailLoading={detailLoading} loadingBasic={LoadingBasic} />
       <div className="grid grid-cols-12 gap-5">
         <div className="flex flex-col col-span-3 p-5 bg-white rounded-lg shadow-lg max-sm:hidden">
           <h2 className="mb-3 text-3xl font-extrabold opacity-85">
@@ -241,8 +244,8 @@ const SentimentList = ({
                     detailLoading ? null : handleTagClick(tag.unique_id)
                   }
                   className={`hover:cursor-pointer active:scale-95 duration-150 flex flex-row gap-1 m-1 px-3 py-2 text-sm rounded-box ${activeTag === tag.unique_id
-                      ? "bg-blue-500 text-white"
-                      : "bg-base-200"
+                    ? "bg-blue-500 text-white"
+                    : "bg-base-200"
                     }`}
                 >
                   🏷️ {tag.tag_name}
@@ -285,12 +288,12 @@ const SentimentList = ({
             </div>
           ) : (
             <div
-                className="flex flex-row gap-1 px-3 py-2 m-1 text-sm duration-150 hover:cursor-pointer active:scale-95 rounded-box bg-base-200"
-                onClick={() =>
-                  document.getElementById("my_modal_2").showModal()
-                }
-              >
-                <i className="ri-add-fill"></i> New Tag
+              className="flex flex-row gap-1 px-3 py-2 m-1 text-sm duration-150 hover:cursor-pointer active:scale-95 rounded-box bg-base-200"
+              onClick={() =>
+                document.getElementById("my_modal_2").showModal()
+              }
+            >
+              <i className="ri-add-fill"></i> New Tag
             </div>
           )}
         </div>
@@ -301,15 +304,47 @@ const SentimentList = ({
               😃 My Sentiment
             </h2>
             {sentiment.length > 0 && (
-              <button
-                className="max-sm:hidden mb-3 shadow-md rounded-xl btn bg-sky-100 hover:bg-sky-200"
-                onClick={() =>
-                  document.getElementById("my_modal_1").showModal()
-                }
-              >
-                Add Sentiment ➕
-              </button>
+              <>
+                <button
+                  className="max-sm:hidden mb-3 shadow-md rounded-xl btn bg-sky-100 hover:bg-sky-200"
+                  onClick={() =>
+                    document.getElementById("my_modal_1").showModal()
+                  }
+                >
+                  Add Sentiment ➕
+                </button>
+                <section className="flex flex-row gap-1 md:hidden mb-3">
+                  <button className="btn" onClick={() =>
+                    document.getElementById("my_modal_1").showModal()
+                  }>
+                    <i className="ri-add-line text-lg"></i>
+                  </button>
+                  <button className="btn">
+                    <i className="ri-search-2-line text-lg" onClick={() => document.getElementById("my_modal_3").showModal()}></i>
+                  </button>
+                </section>
+              </>
             )}
+          </div>
+          <div className="md:hidden flex gap-2 overflow-x-scroll mb-4 p-5 border border-opacity-50 rounded-lg">
+            <span key="addNewTag" className="badge bg-sky-100" onClick={() =>
+                  document.getElementById("my_modal_2").showModal()
+                }>
+              new <i className="ri-add-line"></i>
+            </span>
+            <span key="allTag" className={`
+            badge ${activeTag === null ? "bg-blue-500 text-white" : "bg-base-200"}
+              `} onClick={() => handleTagClick(null)}>
+              all
+            </span>
+            {tags.map((tag, index) => (
+              <span key={index} className={`badge badge-lg ${activeTag === tag.unique_id
+                ? "bg-blue-500 text-white"
+                : "bg-base-200"
+                }`} onClick={() =>
+                detailLoading ? null : handleTagClick(tag.unique_id)
+              }>{tag.tag_name}</span>
+            ))}
           </div>
           {detailLoading ? (
             <LoadingBasic />
@@ -386,7 +421,7 @@ const SentimentList = ({
                 ""
               )
             ) :
-            <EmptyDataPart clearTagClick={clearTagClick} />
+              <EmptyDataPart clearTagClick={clearTagClick} />
           }
         </div>
 

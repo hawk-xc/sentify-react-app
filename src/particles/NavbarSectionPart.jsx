@@ -79,7 +79,7 @@ const NavbarSectionPart = ({ pages, setPage, page }) => {
         <span className="text-2xl font-extrabold">😍 Sentify</span>
       </div>
 
-      <div className="md:hidden active:scale-95 duration-150">
+      <div className="md:hidden opacity-0 active:scale-95 duration-150">
         <i className="ri-search-2-line text-xl p-2"></i>
       </div>
 

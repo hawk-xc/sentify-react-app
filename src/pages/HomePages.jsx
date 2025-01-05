@@ -85,7 +85,7 @@ const GlobalHomePage = (props) => {
 
   return (
     <div className="flex flex-col w-full gap-5 md:p-5">
-      <SentimentSearchModal dashboardData={props.dashboardData} fetchSentimentDetail={props.fetchSentimentDetail} detailLoading={props.detailLoading} loadingBasic={loadingBasic} />
+      <SentimentSearchModal dashboardData={props.dashboardData.sentiment_data} fetchSentimentDetail={props.fetchSentimentDetail} detailLoading={props.detailLoading} loadingBasic={loadingBasic} />
       <div className="flex md:flex-row max-sm:flex-col flex-1 w-full col-span-3 gap-3 align-middle bg-white rounded-lg shadow-sm p-7">
         <div id="GreetingMessage" className="w-full flex flex-col">
           <h2 className="text-3xl font-semibold">👋 Hi, Hello {props.dashboardData?.user_information?.username || 'Guest'}</h2>

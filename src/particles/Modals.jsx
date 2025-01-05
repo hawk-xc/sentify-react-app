@@ -400,7 +400,7 @@ export const DeleteTagModal = (props) => {
   };
 
   return (
-    <dialog id="my_modal_3" className="modal">
+    <dialog id="my_modal_10" className="modal">
       <div className="modal-box">
         <h3 className="text-lg font-bold">Delete Tag?</h3>
         <div role="alert" className="my-3 shadow-lg alert ">
@@ -443,14 +443,24 @@ export const SentimentSearchModal = (props) => {
 
   const handleSearchSentiment = (e) => {
     const searchKeyword = e.target.value;
-    const sentiments = props.dashboardData.sentiment_data;
+    const sentiments = props.dashboardData;
 
-    const filteredSentiments = sentiments.filter((s) => s.sentiment_title && s.sentiment_title.toLowerCase().includes(searchKeyword.toLowerCase()));
+    const sentimentFormat = props.dashboardData.map((sentiment) => {
+      return {
+        sentiment_title: sentiment.sentiment_title || sentiment.title,
+        ...sentiment
+      }
+    })
+
+    const filteredSentiments = sentimentFormat.filter(
+      (s) =>
+        s.sentiment_title &&
+        s.sentiment_title.toLowerCase().includes(searchKeyword.toLowerCase())
+    );
 
     if (filteredSentiments.length > 0) {
       setEmptyData(false);
       setSentimentData(filteredSentiments);
-      // console.log(filteredSentiments)
     } else {
       setEmptyData(true);
       setSentimentData([]);
@@ -493,7 +503,7 @@ export const SentimentSearchModal = (props) => {
           </label>
           <div id="sentimentData" className="w-full mt-3 gap-2 flex flex-col">
             {sentimentData && sentimentData.map((sentiment, index) => (
-              <span key={index} className="font-normal text-xl border border-slate-200 cursor-pointer duration-150 rounded-lg shadow-sm hover:shadow-md flex-row p-2 w-full items-center flex hover:bg-slate-50 active:bg-slate-100 gap-3 text-slate-700" onClick={() => props.fetchSentimentDetail(sentiment.sentiment_unique_id)}>
+              <span key={index} className="font-normal text-xl border border-slate-200 cursor-pointer duration-150 rounded-lg shadow-sm hover:shadow-md flex-row p-2 w-full items-center flex hover:bg-slate-50 active:bg-slate-100 gap-3 text-slate-700" onClick={() => props.fetchSentimentDetail(sentiment.sentiment_unique_id || sentiment.unique_id)}>
                 <i className={`${definePlatformIcon(sentiment.platform)} text-5xl`} />
                 <div className="flex flex-col">
                   <span>{sentimentData && sentiment.sentiment_title}</span>
