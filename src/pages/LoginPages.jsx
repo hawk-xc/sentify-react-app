@@ -53,7 +53,7 @@ export default function Login() {
             </div>
           </dialog>
 
-          <h2 className="mb-6 text-2xl font-bold card-title">Perceivo Login</h2>
+          <h2 className="mb-6 text-2xl font-bold card-title">Sentify Login</h2>
           <form onSubmit={handleSubmit}>
             <div className="form-control">
               <label className="flex items-center gap-2 input input-bordered">
@@ -91,8 +91,16 @@ export default function Login() {
               </label>
             </div>
             <div className="mt-6 form-control">
-              <button className="btn btn-primary" type="submit" disabled={isLoading}>
-                {isLoading ? (<span className="loading loading-dots loading-lg"></span>) : "Login"}
+              <button
+                className="btn btn-primary"
+                type="submit"
+                disabled={isLoading}
+              >
+                {isLoading ? (
+                  <span className="loading loading-dots loading-lg"></span>
+                ) : (
+                  "Login"
+                )}
               </button>
             </div>
           </form>
